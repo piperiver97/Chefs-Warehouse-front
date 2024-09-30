@@ -1,45 +1,38 @@
 <script setup>
-import { ref, computed } from 'vue';
-import Login from './Login.vue';  // Importar el componente Login
-import Register from './Register.vue';  // Importar el componente Register
+import { ref } from 'vue';
+import { useAuthStore } from '../stores/Auth'; // Asegúrate de que la ruta sea correcta
+import { useRouter } from 'vue-router'; // Importa useRouter
 
-// Variable reactiva para rastrear el botón sobre el que se está pasando el ratón
-const hoverButton = ref(null);
+const authStore = useAuthStore();
+const router = useRouter(); // Inicializa el router
 
-// Variable reactiva para rastrear el botón seleccionado
-const selectedButton = ref(1); // Inicialmente seleccionado el botón "ACCEDER"
+const email = ref('');
+const password = ref('');
 
-// Computed para el estilo del degradado del borde
-const gradientStyle = computed(() => ({
-  padding: '1px',
-  background: 'linear-gradient(90deg, rgba(108,213,246,1) 0%, rgba(248,157,92,1) 50%, rgba(91,106,240,1) 100%)',
-}));
-
-// Función para obtener el estilo del botón
-const getButtonStyle = (buttonId) => {
-  if (selectedButton.value === buttonId || hoverButton.value === buttonId) {
-    // Si el botón está seleccionado o está siendo hovered, cambiamos el fondo al degradado
-    return {
-      background: 'linear-gradient(90deg, rgba(108,213,246,1) 0%, rgba(248,157,92,1) 50%, rgba(91,106,240,1) 100%)',
-      color: '#fff',
-      border: '2px solid transparent',
-    };
+const handleSubmit = async () => {
+  try {
+    const result = await authStore.login(email.value, password.value);
+    if (authStore.user.isAuthenticated) {
+      // Redirigir al usuario a SolucionesView
+      router.push('/solucionesview');
+    } else {
+      // Mostrar un mensaje de error
+      console.error('Error en el login', result);
+    }
+  } catch (error) {
+    console.error('Error en el login', error);
   }
-  // De lo contrario, solo tiene el borde degradado
-  return {
-    border: '2px solid',
-    borderImage: 'linear-gradient(90deg, rgba(108,213,246,1) 0%, rgba(248,157,92,1) 50%, rgba(91,106,240,1) 100%)',
-    borderImageSlice: 1,
-  };
 };
+
+// ... (el resto del código del componente se mantiene igual)
 </script>
+
 <template>
   <section class="pt-20 pb-32 bg-black overflow-hidden">
     <div class="container">
       <div class="row g-16">
         <div class="col-12 col-md-6">
           <div class="mw-md-lg">
-           
             <form @submit.prevent="handleSubmit">
               <div class="row mb-4 g-4">
                 <div class="col-12">
@@ -82,7 +75,6 @@ const getButtonStyle = (buttonId) => {
               >
                 Acceder
               </button>
-             
             </form>
           </div>
         </div>
@@ -90,9 +82,3 @@ const getButtonStyle = (buttonId) => {
     </div>
   </section>
 </template>
-
-
-
-<style scoped>
-/* Agregar estilos adicionales si es necesario */
-</style>
