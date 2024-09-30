@@ -7,7 +7,7 @@ import Navbar from "@/components/Navbar.vue";
   <Navbar></Navbar>
   
 
- 
+ <h1>Servicios</h1>
 
   <Footer></Footer>
 </template>

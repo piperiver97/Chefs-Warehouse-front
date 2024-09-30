@@ -36,6 +36,7 @@ export default {
   }
 };
 </script>
+
 <template>
   <section class="pt-20 pb-32 bg-black overflow-hidden">
     <div class="container">
@@ -45,17 +46,15 @@ export default {
         </a>
       </div>
       <div class="row g-16">
-          
         <div class="col-12 col-md-6">
           <div class="mw-md-lg">
-           
             <form @submit.prevent="handleSubmit">
               <div class="row mb-4 g-4">
                 <div class="col-12">
                   <div class="form-group">
                     <label class="fs-18 fw-medium text-white mb-3" for="fullName">Nombre completo</label>
                     <div class="rounded-1" :style="gradientStyle">
-                      <input v-model="fullName" class="bg-black text-dark px-5 py-4 w-100 border-0 rounded-1" id="fullName" type="text" placeholder="i.e. John Doe">
+                      <input v-model="fullName" style="background: black; color: white;" class="px-5 py-4 w-100 border-0 rounded-1" id="fullName" type="text" placeholder="i.e. John Doe">
                     </div>
                   </div>
                 </div>
@@ -63,7 +62,7 @@ export default {
                   <div class="form-group">
                     <label class="fs-18 fw-medium text-white mb-3" for="email">Email</label>
                     <div class="rounded-1" :style="gradientStyle">
-                      <input v-model="email" class="bg-black text-dark px-5 py-4 w-100 border-0 rounded-1" id="email" type="email" placeholder="i.e. john@example.com">
+                      <input v-model="email" style="background: black; color: white;" class="px-5 py-4 w-100 border-0 rounded-1" id="email" type="email" placeholder="i.e. john@example.com">
                     </div>
                   </div>
                 </div>
@@ -71,7 +70,7 @@ export default {
                   <div class="form-group">
                     <label class="fs-18 fw-medium text-white mb-3" for="password">Contraseña</label>
                     <div class="rounded-1" :style="gradientStyle">
-                      <input v-model="password" class="bg-black text-dark px-5 py-4 w-100 border-0 rounded-1" id="password" type="password" placeholder="********">
+                      <input v-model="password" style="background: black; color: white;" class="px-5 py-4 w-100 border-0 rounded-1" id="password" type="password" placeholder="********">
                     </div>
                   </div>
                 </div>
@@ -83,7 +82,6 @@ export default {
               >
                 Registrar
               </button>
-             
             </form>
           </div>
         </div>
@@ -91,8 +89,6 @@ export default {
     </div>
   </section>
 </template>
-
-
 
 <style scoped>
 /* Add any specific styles you need here */

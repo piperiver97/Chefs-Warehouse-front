@@ -9,12 +9,30 @@ const router = useRouter(); // Inicializa el router
 const email = ref('');
 const password = ref('');
 
+// Estilos para el gradiente y el botón
+const gradientStyle = {
+  padding: '1px',
+  background: 'linear-gradient(90deg, rgba(108,213,246,1) 0%, rgba(248,157,92,1) 50%, rgba(91,106,240,1) 100%)',
+  borderRadius: '3px',
+};
+
+const buttonStyle = {
+  letterSpacing: '1px',
+  background: 'linear-gradient(98.24deg, #56C1E3 0%, #5B6AF0 100%)',
+};
+
+// Asegúrate de que el texto del input sea blanco al escribir
+const inputStyle = {
+  backgroundColor: 'black',
+  color: 'white', // Cambia el color del texto a blanco
+};
+
 const handleSubmit = async () => {
   try {
     const result = await authStore.login(email.value, password.value);
     if (authStore.user.isAuthenticated) {
       // Redirigir al usuario a SolucionesView
-      router.push('/solucionesview');
+      router.push('/serviciosview');
     } else {
       // Mostrar un mensaje de error
       console.error('Error en el login', result);
@@ -23,8 +41,6 @@ const handleSubmit = async () => {
     console.error('Error en el login', error);
   }
 };
-
-// ... (el resto del código del componente se mantiene igual)
 </script>
 
 <template>
@@ -43,7 +59,8 @@ const handleSubmit = async () => {
                     <div class="rounded-1" :style="gradientStyle">
                       <input
                         v-model="email"
-                        class="bg-black text-dark px-5 py-4 w-100 border-0 rounded-1"
+                        :style="inputStyle"
+                        class="px-5 py-4 w-100 border-0 rounded-1"
                         id="email"
                         type="email"
                         placeholder="ejemplo.ware@hotmail.com"
@@ -59,7 +76,8 @@ const handleSubmit = async () => {
                     <div class="rounded-1" :style="gradientStyle">
                       <input
                         v-model="password"
-                        class="bg-black text-dark px-5 py-4 w-100 border-0 rounded-1"
+                        :style="inputStyle"
+                        class="px-5 py-4 w-100 border-0 rounded-1"
                         id="password"
                         type="password"
                         placeholder="********"
@@ -82,3 +100,7 @@ const handleSubmit = async () => {
     </div>
   </section>
 </template>
+
+<style scoped>
+/* Add any specific styles you need here */
+</style>

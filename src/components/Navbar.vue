@@ -1,34 +1,31 @@
-
 <script setup>
 import { ref } from 'vue';
 
-const navItems = ref(['Inicio', 'Soluciones', 'Conocenos', 'Contacto']);
+const navItems = ref([
+  { name: 'Inicio', link: '/' },
+  { name: 'Servicios', link: '/serviciosview' },
+  { name: 'Contacto', link: '/contactoview' },
+]);
 
-const gradientStyle = {
-  padding: '2px',
-  background: 'linear-gradient(90deg, rgba(108,213,246,1) 0%, rgba(248,157,92,1) 50%, rgba(91,106,240,1) 100%)'
-};
 </script>
 <template>
   <section>
     <nav class="navbar navbar-dark navbar-expand-lg bg-black py-3">
       <div class="container-fluid">
-        <a class="navbar-brand ms-4" href="#">
+        <!-- Cambiamos el <a> por <router-link> -->
+        <router-link class="navbar-brand ms-4" to="/">
           <img class="img-fluid logo" src="../assets/images/logo.png" alt="Gradia Logo" />
-        </a>
+        </router-link>
         <div class="collapse navbar-collapse justify-content-center">
           <ul class="navbar-nav">
-            <li class="nav-item px-4" v-for="item in navItems" :key="item">
-              <a class="nav-link d-inline-block p-0" href="#">
-                <h3 class="fs-17 fw-medium text-white mb-0">{{ item }}</h3>
-              </a>
+            <li class="nav-item px-4" v-for="item in navItems" :key="item.name">
+              <router-link class="nav-link d-inline-block p-0" :to="item.link">
+                <h3 class="fs-17 fw-medium text-white mb-0">{{ item.name }}</h3>
+              </router-link>
             </li>
           </ul>
         </div>
-        <div class="d-none d-lg-block me-4">
-          <div class="rounded-3" :style="gradientStyle">
-            <!-- Content for the gradient box -->
-          </div>
+        
         </div>
         <div class="d-lg-none me-4">
           <button class="btn navbar-burger p-0">
@@ -38,10 +35,11 @@ const gradientStyle = {
             </svg>
           </button>
         </div>
-      </div>
     </nav>
   </section>
 </template>
+
+
 
 
 <style scoped>
@@ -56,7 +54,7 @@ const gradientStyle = {
 .logo {
   max-width: 130px;
   height: auto;
-  margin-left: 200px;
+  margin-left: 100px;
 }
 
 .navbar-brand {
