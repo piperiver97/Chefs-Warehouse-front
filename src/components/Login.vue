@@ -29,7 +29,7 @@ const handleSubmit = async () => {
         await router.push('/adminview');
       } else if (authStore.user.roles.includes('USER')) {
         console.log('Redirecting to servicios view');
-        await router.push('/serviciosview');
+        await router.push('/ingredientview');
       } else {
         console.log('Unknown role:', authStore.user.roles);
         localError.value = 'Rol no reconocido';
