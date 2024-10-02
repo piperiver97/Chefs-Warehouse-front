@@ -1,10 +1,80 @@
+<template>
+  <main>
+    <Navbar />
+    <div class="pt-20 pb-32 bg-black overflow-hidden">
+      <div class="container">
+        <div class="row g-16">
+          <div class="col-12 col-md-6">
+            <div class="d-flex justify-content-center">
+              <div class="d-inline-block p-1 rounded-pill" :style="gradientStyle">
+                <img class="img-fluid rounded-pill" src="../assets/images/Banner.jpeg" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="mw-md-lg">
+              <h2 class="fs-10 text-white mb-2">Bienvenido a CHEF'S WAREHOUSE</h2>
+              <p class="fs-17 text-light mb-16">El sitio donde cuidamos tu inventario.</p>
+
+              <div class="btn-group mb-4" role="group" aria-label="Basic radio toggle button group">
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="btnradio"
+                  id="btnradio1"
+                  autocomplete="off"
+                  :checked="selectedButton === 1"
+                />
+                <label
+                  class="btn btn-lg rounded-4 px-5 py-3 me-2"
+                  :style="getButtonStyle(1)"
+                  for="btnradio1"
+                  @mouseover="hoverButton = 1"
+                  @mouseleave="hoverButton = null"
+                  @click="selectedButton = 1"
+                >
+                  ACCEDER
+                </label>
+
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="btnradio"
+                  id="btnradio2"
+                  autocomplete="off"
+                  :checked="selectedButton === 2"
+                />
+                <label
+                  class="btn btn-lg rounded-4 px-5 py-3"
+                  :style="getButtonStyle(2)"
+                  for="btnradio2"
+                  @mouseover="hoverButton = 2"
+                  @mouseleave="hoverButton = null"
+                  @click="selectedButton = 2"
+                >
+                  REGISTRO
+                </label>
+              </div>
+
+              <!-- Aquí está la transición -->
+              <transition name="fade" mode="out-in">
+                <component :is="selectedButton === 1 ? Login : Register" key="selectedComponent" />
+              </transition>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <Footer />
+  </main>
+</template>
+
 <script setup>
 import { ref, computed } from 'vue';
 import Login from '../components/Login.vue';
 import Register from '../components/Register.vue';
 import Navbar from '@/components/Navbar.vue';
 import Footer from '@/components/Footer.vue';
-
 
 const selectedButton = ref(1);
 const hoverButton = ref(null);
@@ -29,74 +99,6 @@ const getButtonStyle = (buttonId) => {
   };
 };
 </script>
-<template>
- <Navbar/>
-  <div class="pt-20 pb-32 bg-black overflow-hidden">
-    <div class="container">
-      <div class="row g-16">
-        <div class="col-12 col-md-6">
-          <div class="d-flex justify-content-center">
-            <div class="d-inline-block p-1 rounded-pill" :style="gradientStyle">
-              <img class="img-fluid rounded-pill" src="../assets/images/Banner.jpeg" alt="" />
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-md-6">
-          <div class="mw-md-lg">
-            <h2 class="fs-10 text-white mb-2">Bienvenido a CHEF'S WAREHOUSE</h2>
-            <p class="fs-17 text-light mb-16">
-              El sitio donde cuidamos tu inventario.
-            </p>
-            
-            <div class="btn-group mb-4" role="group" aria-label="Basic radio toggle button group">
-              <input
-                type="radio"
-                class="btn-check"
-                name="btnradio"
-                id="btnradio1"
-                autocomplete="off"
-                :checked="selectedButton === 1"
-              />
-              <label
-                class="btn btn-lg rounded-4 px-5 py-3 me-2"
-                :style="getButtonStyle(1)"
-                for="btnradio1"
-                @mouseover="hoverButton = 1"
-                @mouseleave="hoverButton = null"
-                @click="selectedButton = 1"
-              >ACCEDER</label>
-
-              <input
-                type="radio"
-                class="btn-check"
-                name="btnradio"
-                id="btnradio2"
-                autocomplete="off"
-                :checked="selectedButton === 2"
-              />
-              <label
-                class="btn btn-lg rounded-4 px-5 py-3"
-                :style="getButtonStyle(2)"
-                for="btnradio2"
-                @mouseover="hoverButton = 2"
-                @mouseleave="hoverButton = null"
-                @click="selectedButton = 2"
-              >REGISTRO</label>
-            </div>
-
-            <transition name="fade" mode="out-in">
-              <component :is="selectedButton === 1 ? Login : Register"></component>
-            </transition>
-            
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
- <Footer/>
-</template>
-
-
 
 <style scoped>
 .fade-enter-active,

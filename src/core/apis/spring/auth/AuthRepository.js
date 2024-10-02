@@ -1,27 +1,26 @@
-import axios from "axios"
+import axios from 'axios'
 
 export default class AuthRepository {
-
     constructor() {
         this.baseUrl = import.meta.env.VITE_API_ENDPOINT_CHEFWAREHOUSE
     }
 
     async login(credentials) {
         try {
-            const response = await axios.get(this.baseUrl + '/login', {
+            const response = await axios({
+                method: 'get',
+                url: `${this.baseUrl}/login`,
                 auth: {
-                    "username": credentials.getUsername(),
-                    "password": credentials.getPassword()
+                    username: credentials.username,
+                    password: credentials.password
                 },
                 withCredentials: true
-            })
-
-            const data = await response.data
-
-            return data;
-
+            });
+            
+            return response.data;
         } catch (error) {
-            return error.toJSON()
+            console.error('Repository Error:', error.response?.data || error.message);
+            throw error;
         }
     }
 }

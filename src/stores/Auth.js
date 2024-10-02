@@ -1,39 +1,47 @@
-import { ref, reactive } from "vue";
 import { defineStore } from "pinia";
 import AuthService from "@/core/apis/spring/auth/AuthService";
-import Credentials from "@/core/models/Credentials";
 
-export const useAuthStore = defineStore('auth', () => {
-    const user = reactive({
-        username: '',
-        roles: '',
-        isAuthenticated: false
-    });
-
-    async function login(username, password) {
-        const credentials = new Credentials(username, password);
-        const service = new AuthService(credentials);
-        try {
-            const response = await service.login();
-            if (response.message === "Logged") {
-                user.username = response.username;
-                user.roles = response.roles;
-                user.isAuthenticated = true;
-                return true;
-            } else {
+export const useAuthStore = defineStore('auth', {
+    state: () => ({
+        user: {
+            username: '',
+            roles: '',
+            isAuthenticated: false
+        },
+        error: null
+    }),
+    actions: {
+        async login(username, password) {
+            this.error = null;
+            try {
+                const credentials = { username, password };
+                const service = new AuthService(credentials);
+                const response = await service.login();
+                
+                if (response && response.message === "Logged") {
+                    this.user = {
+                        username: response.username,
+                        roles: response.roles,
+                        isAuthenticated: true
+                    };
+                    return true;
+                } else {
+                    this.error = 'Credenciales inválidas';
+                    return false;
+                }
+            } catch (error) {
+                console.error('Store: Error en login:', error);
+                this.error = error.response?.data?.message || 'Error al intentar iniciar sesión';
                 return false;
             }
-        } catch (error) {
-            console.error('Error durante el login:', error);
-            return false;
+        },
+        logout() {
+            this.user = {
+                username: '',
+                roles: '',
+                isAuthenticated: false
+            };
+            this.error = null;
         }
     }
-
-    function logout() {
-        user.username = '';
-        user.roles = '';
-        user.isAuthenticated = false;
-    }
-
-    return { user, login, logout };
 });

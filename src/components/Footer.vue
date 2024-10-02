@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <footer class="footer bg-black text-light py-4">
+    <footer class="footer bg-black text-light py-4 mb-0"> <!-- mb-0 para eliminar el margen inferior -->
       <div class="container">
         <div class="row g-4">
           <div class="col-md-6 col-lg-4">
@@ -52,8 +52,10 @@ export default {
 }
 
 .footer {
-  margin-top: auto; /* Empuja el footer hacia abajo */
- 
+  margin-top: 0; /* Eliminar margen superior */
+  padding: 1rem; /* Ajusta el padding según sea necesario */
+  position: relative; /* Para un mejor control sobre el posicionamiento */
+  flex-shrink: 0; /* Evitar que el footer se encoja */
 }
 
 .footer-heading {
@@ -90,23 +92,5 @@ export default {
 .social-icon:hover {
   color: #ffffff;
   transform: translateY(-3px);
-}
-
-@keyframes gradientFlow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-.footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #007bff, #00ff88, #007bff);
-  background-size: 200% 200%;
-  animation: gradientFlow 5s ease infinite;
 }
 </style>
