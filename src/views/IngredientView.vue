@@ -1,14 +1,9 @@
+<!-- src/views/IngredientView.vue -->
 
+<template>
+  <Ingredient />
+</template>
 
 <script setup>
-import Ingrediente from '@/components/Ingrediente.vue';
-
-
-
+import Ingredient from '@/components/Ingredient.vue';
 </script>
-<template>
-  <Ingrediente></Ingrediente>
-  </template>
-<style scoped>
-/* Estilos específicos si es necesario */
-</style>
