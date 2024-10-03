@@ -1,9 +1,16 @@
 <!-- src/views/IngredientView.vue -->
+<script setup>
+import FiltroIngredientes from '@/components/FiltroIngredientes.vue';
+import Ingredient from '@/components/Ingredient.vue';
+
+</script>
 
 <template>
-  <Ingredient />
+<FiltroIngredientes/>    
+<Ingredient />
+
 </template>
 
-<script setup>
-import Ingredient from '@/components/Ingredient.vue';
-</script>
+<style scoped>
+
+</style>

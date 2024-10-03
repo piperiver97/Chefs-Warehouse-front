@@ -1,27 +1,70 @@
-<!-- src/components/Ingredient.vue -->
 <script setup>
 import { ref, onMounted } from 'vue';
 import IngredientService from '../core/apis/spring/ingredient/IngredientService';
+import ProviderService from '../core/apis/spring/provider/ProviderService';
 
-const ingredients = ref([]);
+const ingredients = ref([]); // Arreglo de ingredientes
+const providers = ref([]); // Arreglo de proveedores
+
+// Formulario para nuevo proveedor
+const newProvider = ref({
+  nombre: '',
+  telefono: '',
+  tipoCategoria: ''
+});
+
+// Opciones de almacenamiento
+const storageOptions = ['Frío', 'Congelado', 'Ambiente'];
+
+// Opciones de categoría corregidas
+const categoryOptions = [
+  'Vegetales',
+  'Carnes',
+  'Lácteos',
+  'Granos y Cereales',
+  'Embutidos',
+  'Especias',
+  'Legumbres',
+  'Huevos'
+];
+
+// Estructura inicial para nuevo ingrediente
 const newIngredient = ref({
   nombre: '',
-  cantidad: '',
+  cantidadKilos: 0,
+  cantidadGramos: 0,
+  cantidadUnidades: 0,
   fechaDeCaducidad: '',
   almacenamiento: '',
   categoria: '',
-  imagen: ''
+  imagen: '',
+  proveedorId: null
 });
-const isEditing = ref(false);
-const editingId = ref(null);
-const loading = ref(false);
-const errorMessage = ref('');
 
+const isEditing = ref(false); // Indica si se está editando un ingrediente
+const editingId = ref(null); // ID del ingrediente en edición
+const loading = ref(false); // Estado de carga
+const errorMessage = ref(''); // Mensaje de error
+const isModalVisible = ref(false); // Modal para ingredientes
+const isProviderModalVisible = ref(false); // Modal para añadir proveedores
+const currentProvider = ref(null); // Información del proveedor actual
+
+// Cargar proveedores
+const fetchProviders = async () => {
+  try {
+    providers.value = await ProviderService.getAllProviders();
+  } catch (error) {
+    errorMessage.value = 'Error al cargar proveedores';
+  }
+};
+
+// Cargar ingredientes
 const fetchIngredients = async () => {
   loading.value = true;
   errorMessage.value = '';
   try {
     ingredients.value = await IngredientService.getAllIngredients();
+    await fetchProviders(); // Cargar proveedores tras cargar ingredientes
   } catch (error) {
     errorMessage.value = 'Error al cargar ingredientes';
   } finally {
@@ -29,71 +72,145 @@ const fetchIngredients = async () => {
   }
 };
 
+// Mostrar la información de un proveedor
+const showProviderInfo = async (proveedorId) => {
+  try {
+    currentProvider.value = providers.value.find(p => p.id === proveedorId);
+    if (!currentProvider.value) {
+      throw new Error('Proveedor no encontrado');
+    }
+    closeModal(); // Cierra otros modales
+    isProviderModalVisible.value = true; // Abre modal del proveedor
+  } catch (error) {
+    errorMessage.value = 'Error al cargar información del proveedor';
+  }
+};
+
+// Eliminar un ingrediente
 const deleteIngredient = async (id) => {
+  if (!confirm('¿Estás seguro de que quieres eliminar este ingrediente?')) return;
   errorMessage.value = '';
   try {
     await IngredientService.deleteIngredient(id);
     ingredients.value = ingredients.value.filter(ingredient => ingredient.id !== id);
   } catch (error) {
-    errorMessage.value = `Error al eliminar el ingrediente: ${id}`;
+    errorMessage.value = `Error al eliminar el ingrediente: ${error.message}`;
   }
 };
 
+// Editar un ingrediente
 const editIngredient = (ingredient) => {
   isEditing.value = true;
   editingId.value = ingredient.id;
-  newIngredient.value = { ...ingredient };
+  newIngredient.value = { ...ingredient }; // Copia el ingrediente a editar
+  closeModal(); // Cierra otros modales
+  isModalVisible.value = true; // Abre modal de edición
 };
 
-const submitForm = async () => {
+// Abrir modal para crear ingrediente
+const openCreateModal = () => {
+  isEditing.value = false;
+  resetForm();
+  closeModal(); // Asegura que otros modales estén cerrados
+  isModalVisible.value = true; // Abre modal de ingredientes
+};
+
+// Abrir modal para crear proveedor
+const openCreateProviderModal = () => {
+  resetProviderForm();
+  closeModal(); // Asegura que otros modales estén cerrados
+  isProviderModalVisible.value = true; // Abre modal de proveedores
+};
+
+// Cerrar cualquier modal
+const closeModal = () => {
+  isModalVisible.value = false; // Cierra modal de ingredientes
+  isProviderModalVisible.value = false; // Cierra modal de proveedores
+};
+
+// Enviar formulario de ingredientes
+const submitIngredientForm = async () => {
   errorMessage.value = '';
   try {
     if (isEditing.value) {
       await IngredientService.updateIngredient(editingId.value, newIngredient.value);
-      isEditing.value = false;
     } else {
       await IngredientService.createIngredient(newIngredient.value);
     }
     resetForm();
-    fetchIngredients();
+    await fetchIngredients();
+    closeModal();
   } catch (error) {
-    errorMessage.value = 'Error al guardar el ingrediente';
+    errorMessage.value = `Error al ${isEditing.value ? 'actualizar' : 'crear'} el ingrediente: ${error.message}`;
   }
 };
 
+// Enviar formulario de proveedor
+const submitProviderForm = async () => {
+  errorMessage.value = '';
+  try {
+    await ProviderService.createProvider(newProvider.value);
+    resetProviderForm();
+    await fetchProviders();
+    closeModal();
+  } catch (error) {
+    errorMessage.value = `Error al crear el proveedor: ${error.message}`;
+  }
+};
+
+// Resetea formulario de ingredientes
 const resetForm = () => {
   newIngredient.value = {
     nombre: '',
-    cantidad: '',
+    cantidadKilos: 0,
+    cantidadGramos: 0,
+    cantidadUnidades: 0,
     fechaDeCaducidad: '',
     almacenamiento: '',
     categoria: '',
-    imagen: ''
+    imagen: '',
+    proveedorId: null
   };
   isEditing.value = false;
   editingId.value = null;
 };
 
-onMounted(fetchIngredients);
+// Resetea formulario de proveedores
+const resetProviderForm = () => {
+  newProvider.value = {
+    nombre: '',
+    telefono: '',
+    tipoCategoria: ''
+  };
+};
+
+onMounted(fetchIngredients); // Cargar datos al montar el componente
 </script>
+
+
 
 <template>
   <div class="ingredient-container">
     <h2>Inventario del Restaurante</h2>
-    
+    <button class="add-ingredient" @click="openCreateModal">Añadir Ingrediente</button>
+    <button class="add-provider" @click="openCreateProviderModal">Añadir Proveedor</button>
+
     <div v-if="loading" class="loading">Cargando inventario...</div>
-    
+
     <div v-else-if="ingredients.length" class="ingredient-grid">
       <div v-for="ingredient in ingredients" :key="ingredient.id" class="ingredient-card">
         <img :src="ingredient.imagen" :alt="ingredient.nombre" class="ingredient-image" />
         <div class="ingredient-info">
           <h3>{{ ingredient.nombre }}</h3>
-          <p><strong>Cantidad:</strong> {{ ingredient.cantidad }}</p>
-          <p><strong>Caducidad:</strong> {{ ingredient.fechaDeCaducidad }}</p>
+          <p v-if="ingredient.cantidadKilos > 0"><strong>Kilos:</strong> {{ ingredient.cantidadKilos }}</p>
+          <p v-if="ingredient.cantidadGramos > 0"><strong>Gramos:</strong> {{ ingredient.cantidadGramos }}</p>
+          <p v-if="ingredient.cantidadUnidades > 0"><strong>Unidades:</strong> {{ ingredient.cantidadUnidades }}</p>
+          <p><strong>Caducidad:</strong> {{ new Date(ingredient.fechaDeCaducidad).toLocaleDateString() }}</p>
           <p><strong>Almacenamiento:</strong> {{ ingredient.almacenamiento }}</p>
           <p><strong>Categoría:</strong> {{ ingredient.categoria }}</p>
           <div class="button-group">
             <button class="edit" @click="editIngredient(ingredient)">Editar</button>
+            <button class="provider" @click="showProviderInfo(ingredient.proveedorId)">Información Proveedor</button>
             <button class="delete" @click="deleteIngredient(ingredient.id)">Eliminar</button>
           </div>
         </div>
@@ -101,25 +218,121 @@ onMounted(fetchIngredients);
     </div>
     <p v-else>No hay ingredientes en el inventario.</p>
 
-    <form @submit.prevent="submitForm">
-      <h3>{{ isEditing ? 'Editar Ingrediente' : 'Añadir Nuevo Ingrediente' }}</h3>
-      <input v-model="newIngredient.nombre" placeholder="Nombre del ingrediente" required />
-      <input v-model="newIngredient.cantidad" type="number" min="1" placeholder="Cantidad" required />
-      <input v-model="newIngredient.fechaDeCaducidad" type="date" required />
-      <input v-model="newIngredient.almacenamiento" placeholder="Método de almacenamiento" required />
-      <input v-model="newIngredient.categoria" placeholder="Categoría" required />
-      <input v-model="newIngredient.imagen" placeholder="URL de la imagen" required />
-      <button type="submit">{{ isEditing ? 'Actualizar Ingrediente' : 'Añadir Ingrediente' }}</button>
-    </form>
-    
-    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+    <!-- Modal de Ingrediente -->
+    <div v-if="isModalVisible" class="modal-overlay">
+      <div class="modal-content">
+        <span class="close" @click="closeModal">&times;</span>
+        <h3>{{ isEditing ? 'Editar Ingrediente' : 'Añadir Nuevo Ingrediente' }}</h3>
+        <form @submit.prevent="submitIngredientForm">
+          <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input id="nombre" v-model="newIngredient.nombre" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="cantidadKilos">Cantidad en Kilos:</label>
+            <input id="cantidadKilos" v-model="newIngredient.cantidadKilos" type="number" min="0" />
+          </div>
+          
+          <div class="form-group">
+            <label for="cantidadGramos">Cantidad en Gramos:</label>
+            <input id="cantidadGramos" v-model="newIngredient.cantidadGramos" type="number" min="0" />
+          </div>
+          
+          <div class="form-group">
+            <label for="cantidadUnidades">Cantidad en Unidades:</label>
+            <input id="cantidadUnidades" v-model="newIngredient.cantidadUnidades" type="number" min="0" />
+          </div>
+          
+          <div class="form-group">
+            <label for="fechaCaducidad">Fecha de Caducidad:</label>
+            <input id="fechaCaducidad" v-model="newIngredient.fechaDeCaducidad" type="date" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="almacenamiento">Almacenamiento:</label>
+            <select id="almacenamiento" v-model="newIngredient.almacenamiento" required>
+              <option value="">Seleccione almacenamiento</option>
+              <option v-for="option in storageOptions" :key="option" :value="option">
+                {{ option }}
+              </option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="categoria">Categoría:</label>
+            <select id="categoria" v-model="newIngredient.categoria" required>
+              <option value="">Seleccione categoría</option>
+              <option v-for="option in categoryOptions" :key="option" :value="option">
+                {{ option }}
+              </option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="imagen">URL de Imagen:</label>
+            <input id="imagen" v-model="newIngredient.imagen" type="url" />
+          </div>
+
+          <div class="form-group">
+            <label for="proveedor">Proveedor:</label>
+            <select id="proveedor" v-model="newIngredient.proveedorId" required>
+              <option value="">Seleccione proveedor</option>
+              <option v-for="provider in providers" :key="provider.id" :value="provider.id">
+                {{ provider.nombre }}
+              </option>
+            </select>
+          </div>
+
+          <button type="submit">{{ isEditing ? 'Actualizar Ingrediente' : 'Añadir Ingrediente' }}</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal de Proveedor -->
+    <div v-if="isProviderModalVisible" class="modal-overlay">
+      <div class="modal-content">
+        <span class="close" @click="closeModal">&times;</span>
+        <h3>Añadir Nuevo Proveedor</h3>
+        <form @submit.prevent="submitProviderForm">
+          <div class="form-group">
+            <label for="providerNombre">Nombre:</label>
+            <input id="providerNombre" v-model="newProvider.nombre" required />
+          </div>
+          <div class="form-group">
+            <label for="providerTelefono">Teléfono:</label>
+            <input id="providerTelefono" v-model="newProvider.telefono" required />
+          </div>
+          <div class="form-group">
+            <label for="providerTipoCategoria">Tipo de Categoría:</label>
+            <input id="providerTipoCategoria" v-model="newProvider.tipoCategoria" required />
+          </div>
+          <button type="submit">Añadir Proveedor</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Mostrar Información del Proveedor -->
+    <div v-if="isProviderModalVisible && currentProvider" class="modal-overlay">
+      <div class="modal-content">
+        <span class="close" @click="closeModal">&times;</span>
+        <h3>Información del Proveedor</h3>
+        <div>
+          <p><strong>Nombre:</strong> {{ currentProvider.nombre }}</p>
+          <p><strong>Teléfono:</strong> {{ currentProvider.telefono }}</p>
+          <p><strong>Tipo de Categoría:</strong> {{ currentProvider.tipoCategoria }}</p>
+        </div>
+      </div>
+    </div>
+
+    <p v-if="errorMessage">{{ errorMessage }}</p>
   </div>
 </template>
 
 
 
-<style scoped>
 
+<style scoped>
 .ingredient-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -212,46 +425,7 @@ button:hover {
   opacity: 0.9;
 }
 
-/* Form styles */
-form {
-  max-width: 500px;
-  margin: 30px auto;
-  padding: 20px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-form input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #bdc3c7;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-form button {
-  width: 100%;
-  padding: 12px;
-  background-color: #2ecc71;
-  color: white;
-  font-size: 1.1rem;
-}
-
-.error {
-  color: #e74c3c;
-  text-align: center;
-  margin-top: 10px;
-}
-
-/* Loading state */
-.loading {
-  text-align: center;
-  font-size: 1.2rem;
-  color: #7f8c8d;
-  margin: 20px 0;
-}
+/* Estilos del Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -292,4 +466,58 @@ form button {
   border-radius: 4px;
   cursor: pointer;
 }
+
+form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #2ecc71;
+  color: white;
+  font-size: 1.1rem;
+}
+
+.error {
+  color: #e74c3c;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  margin: 20px 0;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button.provider {
+  background-color: #f39c12;
+  color: white;
+}
+
+.modal-content {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Ajustamos el grid para que las tarjetas sean más anchas */
+.ingredient-grid {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
 </style>
