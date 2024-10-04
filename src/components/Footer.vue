@@ -1,5 +1,7 @@
 <template>
-  <div class="page-container">
+  
+    
+
     <footer class="footer bg-black text-light py-4 mb-0"> <!-- mb-0 para eliminar el margen inferior -->
       <div class="container">
         <div class="row g-4">
@@ -35,7 +37,6 @@
         </div>
       </div>
     </footer>
-  </div>
 </template>
 
 <script>
@@ -46,16 +47,17 @@ export default {
 
 <style scoped>
 .page-container {
-  min-height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
   display: flex;
   flex-direction: column;
+  min-height: 100vh; 
+}
+
+.content {
+  flex-grow: 1; 
 }
 
 .footer {
-  margin-top: 0; /* Eliminar margen superior */
-  padding: 1rem; /* Ajusta el padding según sea necesario */
-  position: relative; /* Para un mejor control sobre el posicionamiento */
-  flex-shrink: 0; /* Evitar que el footer se encoja */
+  padding: 1rem;
 }
 
 .footer-heading {

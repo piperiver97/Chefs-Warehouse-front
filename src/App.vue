@@ -23,7 +23,9 @@ router.afterEach(() => {
   <div id="app">
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
-        <component :is="Component" />
+        <div> <!-- Aquí se envuelve el componente en un div -->
+          <component :is="Component" />
+        </div>
       </transition>
     </router-view>
     
