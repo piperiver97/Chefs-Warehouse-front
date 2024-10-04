@@ -3,7 +3,6 @@ import { ref, computed } from 'vue';
 import Login from '../components/Login.vue';
 import Register from '../components/Register.vue';
 import Navbar from '@/components/Navbar.vue';
-import Footer from '@/components/Footer.vue';
 
 const selectedButton = ref(1);
 const hoverButton = ref(null);
@@ -93,7 +92,7 @@ const getButtonStyle = (buttonId) => {
       </div>
     </div>
   </main>
-  <Footer />
+
 </template>
 
 

@@ -2,6 +2,8 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import VegetableLoading from './components/VegetableLoading.vue';
+import Footer from './components/Footer.vue';
+
 
 const isLoading = ref(false);
 const router = useRouter();
@@ -32,6 +34,7 @@ router.afterEach(() => {
     <!-- Cargando vegetales -->
     <VegetableLoading v-if="isLoading" />
   </div>
+  <Footer/>
 </template>
 
 <style scoped>

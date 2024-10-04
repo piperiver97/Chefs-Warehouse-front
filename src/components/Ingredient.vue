@@ -47,6 +47,7 @@ const loading = ref(false); // Estado de carga
 const errorMessage = ref(''); // Mensaje de error
 const isModalVisible = ref(false); // Modal para ingredientes
 const isProviderModalVisible = ref(false); // Modal para añadir proveedores
+const isProviderInfoModalVisible = ref(false); // Modal específico para mostrar info del proveedor
 const currentProvider = ref(null); // Información del proveedor actual
 
 // Cargar proveedores
@@ -79,8 +80,8 @@ const showProviderInfo = async (proveedorId) => {
     if (!currentProvider.value) {
       throw new Error('Proveedor no encontrado');
     }
-    closeModal(); // Cierra otros modales
-    isProviderModalVisible.value = true; // Abre modal del proveedor
+    isProviderModalVisible.value = false; // Asegurarse de que el modal de añadir esté cerrado
+    isProviderInfoModalVisible.value = true; // Abrir modal de información
   } catch (error) {
     errorMessage.value = 'Error al cargar información del proveedor';
   }
@@ -126,6 +127,8 @@ const openCreateProviderModal = () => {
 const closeModal = () => {
   isModalVisible.value = false; // Cierra modal de ingredientes
   isProviderModalVisible.value = false; // Cierra modal de proveedores
+  isProviderInfoModalVisible.value = false; // Cierra modal de información del proveedor
+  currentProvider.value = null; // Resetea el proveedor actual
 };
 
 // Enviar formulario de ingredientes
@@ -152,7 +155,7 @@ const submitProviderForm = async () => {
     await ProviderService.createProvider(newProvider.value);
     resetProviderForm();
     await fetchProviders();
-    closeModal();
+    closeModal(); // Cerrar el modal de proveedor
   } catch (error) {
     errorMessage.value = `Error al crear el proveedor: ${error.message}`;
   }
@@ -186,8 +189,6 @@ const resetProviderForm = () => {
 
 onMounted(fetchIngredients); // Cargar datos al montar el componente
 </script>
-
-
 
 <template>
   <div class="ingredient-container">
@@ -243,49 +244,37 @@ onMounted(fetchIngredients); // Cargar datos al montar el componente
             <label for="cantidadUnidades">Cantidad en Unidades:</label>
             <input id="cantidadUnidades" v-model="newIngredient.cantidadUnidades" type="number" min="0" />
           </div>
-          
+
           <div class="form-group">
-            <label for="fechaCaducidad">Fecha de Caducidad:</label>
-            <input id="fechaCaducidad" v-model="newIngredient.fechaDeCaducidad" type="date" required />
+            <label for="fechaDeCaducidad">Fecha de Caducidad:</label>
+            <input id="fechaDeCaducidad" type="date" v-model="newIngredient.fechaDeCaducidad" required />
           </div>
           
           <div class="form-group">
-            <label for="almacenamiento">Almacenamiento:</label>
+            <label for="almacenamiento">Tipo de Almacenamiento:</label>
             <select id="almacenamiento" v-model="newIngredient.almacenamiento" required>
-              <option value="">Seleccione almacenamiento</option>
-              <option v-for="option in storageOptions" :key="option" :value="option">
-                {{ option }}
-              </option>
+              <option v-for="option in storageOptions" :key="option" :value="option">{{ option }}</option>
             </select>
           </div>
           
           <div class="form-group">
             <label for="categoria">Categoría:</label>
             <select id="categoria" v-model="newIngredient.categoria" required>
-              <option value="">Seleccione categoría</option>
-              <option v-for="option in categoryOptions" :key="option" :value="option">
-                {{ option }}
-              </option>
+              <option v-for="option in categoryOptions" :key="option" :value="option">{{ option }}</option>
             </select>
-          </div>
-          
-          <div class="form-group">
-            <label for="imagen">URL de Imagen:</label>
-            <input id="imagen" v-model="newIngredient.imagen" type="url" />
           </div>
 
           <div class="form-group">
             <label for="proveedor">Proveedor:</label>
             <select id="proveedor" v-model="newIngredient.proveedorId" required>
-              <option value="">Seleccione proveedor</option>
-              <option v-for="provider in providers" :key="provider.id" :value="provider.id">
-                {{ provider.nombre }}
-              </option>
+              <option value="" disabled selected>Seleccione un proveedor</option>
+              <option v-for="provider in providers" :key="provider.id" :value="provider.id">{{ provider.nombre }}</option>
             </select>
           </div>
 
-          <button type="submit">{{ isEditing ? 'Actualizar Ingrediente' : 'Añadir Ingrediente' }}</button>
+          <button type="submit">{{ isEditing ? 'Actualizar' : 'Crear' }}</button>
         </form>
+        <p v-if="errorMessage">{{ errorMessage }}</p>
       </div>
     </div>
 
@@ -293,43 +282,42 @@ onMounted(fetchIngredients); // Cargar datos al montar el componente
     <div v-if="isProviderModalVisible" class="modal-overlay">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
-        <h3>Añadir Nuevo Proveedor</h3>
+        <h3>Añadir Proveedor</h3>
         <form @submit.prevent="submitProviderForm">
           <div class="form-group">
-            <label for="providerNombre">Nombre:</label>
-            <input id="providerNombre" v-model="newProvider.nombre" required />
+            <label for="nombre">Nombre del Proveedor:</label>
+            <input id="nombre" v-model="newProvider.nombre" required />
           </div>
           <div class="form-group">
-            <label for="providerTelefono">Teléfono:</label>
-            <input id="providerTelefono" v-model="newProvider.telefono" required />
+            <label for="telefono">Teléfono:</label>
+            <input id="telefono" v-model="newProvider.telefono" required />
           </div>
           <div class="form-group">
-            <label for="providerTipoCategoria">Tipo de Categoría:</label>
-            <input id="providerTipoCategoria" v-model="newProvider.tipoCategoria" required />
+            <label for="tipoCategoria">Tipo de Categoría:</label>
+            <input id="tipoCategoria" v-model="newProvider.tipoCategoria" required />
           </div>
-          <button type="submit">Añadir Proveedor</button>
+          <button type="submit">Crear Proveedor</button>
         </form>
+        <p v-if="errorMessage">{{ errorMessage }}</p>
       </div>
     </div>
 
-    <!-- Mostrar Información del Proveedor -->
-    <div v-if="isProviderModalVisible && currentProvider" class="modal-overlay">
+    <!-- Modal de Información del Proveedor -->
+    <div v-if="isProviderInfoModalVisible" class="modal-overlay">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
         <h3>Información del Proveedor</h3>
-        <div>
+        <div v-if="currentProvider">
           <p><strong>Nombre:</strong> {{ currentProvider.nombre }}</p>
           <p><strong>Teléfono:</strong> {{ currentProvider.telefono }}</p>
           <p><strong>Tipo de Categoría:</strong> {{ currentProvider.tipoCategoria }}</p>
         </div>
+        <button @click="closeModal">Cerrar</button>
       </div>
     </div>
 
-    <p v-if="errorMessage">{{ errorMessage }}</p>
   </div>
 </template>
-
-
 
 
 <style scoped>

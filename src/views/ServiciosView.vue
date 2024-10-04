@@ -1,5 +1,4 @@
 <script setup>
-import Footer from "@/components/Footer.vue";
 
 import Navbar from "@/components/Navbar.vue";
 </script>
@@ -8,7 +7,6 @@ import Navbar from "@/components/Navbar.vue";
   <Navbar></Navbar>
  <h1>Servicios</h1>
 
-  <Footer></Footer>
 </main>
 </template>
 
