@@ -13,9 +13,7 @@ const newProvider = ref({
   tipoCategoria: ''
 });
 
-
 const storageOptions = ['Frío', 'Congelado', 'Ambiente'];
-
 
 const categoryOptions = [
   'Vegetales',
@@ -110,11 +108,7 @@ const openCreateModal = () => {
   isModalVisible.value = true; 
 };
 
-const openCreateProviderModal = () => {
-  resetProviderForm();
-  closeModal(); 
-  isProviderModalVisible.value = true; 
-};
+
 
 const closeModal = () => {
   isModalVisible.value = false; 
@@ -182,7 +176,6 @@ onMounted(fetchIngredients);
   <div class="ingredient-container">
     <h2>Inventario del Restaurante</h2>
     <button class="add-ingredient" @click="openCreateModal">Añadir Ingrediente</button>
-    <button class="add-provider" @click="openCreateProviderModal">Añadir Proveedor</button>
 
     <div v-if="loading" class="loading">Cargando inventario...</div>
 
@@ -276,7 +269,7 @@ onMounted(fetchIngredients);
     <div v-if="isProviderModalVisible" class="modal-overlay">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
-        <h3>Añadir Proveedor</h3>
+       
         <form @submit.prevent="submitProviderForm">
           <div class="form-group">
             <label for="nombre">Nombre del Proveedor:</label>
