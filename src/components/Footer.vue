@@ -20,7 +20,6 @@
             <ul class="list-unstyled">
               <li><a href="#" class="footer-link">Inicio</a></li>
               <li><a href="#" class="footer-link">Servicios</a></li>
-              <li><a href="#" class="footer-link">Proyectos</a></li>
               <li><a href="#" class="footer-link">Contacto</a></li>
             </ul>
           </div>

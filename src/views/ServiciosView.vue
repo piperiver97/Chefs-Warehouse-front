@@ -1,15 +1,20 @@
 <script setup>
 
 import Navbar from "@/components/Navbar.vue";
+import ServiceBanner from "@/components/servicebanner.vue";
+import Servicios from "@/components/Servicios.vue";
+
 </script>
 <template>
-   <main>
+ <main> 
   <Navbar></Navbar>
- <h1>Servicios</h1>
-
-</main>
+<ServiceBanner/>
+  <Servicios/>
+ </main> 
 </template>
 
 <style scoped>
-
+main{
+   background: black;
+}
 </style>
