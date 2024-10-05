@@ -3,20 +3,20 @@ import { ref, onMounted } from 'vue';
 import IngredientService from '../core/apis/spring/ingredient/IngredientService';
 import ProviderService from '../core/apis/spring/provider/ProviderService';
 
-const ingredients = ref([]); // Arreglo de ingredientes
-const providers = ref([]); // Arreglo de proveedores
+const ingredients = ref([]); 
+const providers = ref([]); 
 
-// Formulario para nuevo proveedor
+
 const newProvider = ref({
   nombre: '',
   telefono: '',
   tipoCategoria: ''
 });
 
-// Opciones de almacenamiento
+
 const storageOptions = ['Frío', 'Congelado', 'Ambiente'];
 
-// Opciones de categoría corregidas
+
 const categoryOptions = [
   'Vegetales',
   'Carnes',
@@ -28,7 +28,7 @@ const categoryOptions = [
   'Huevos'
 ];
 
-// Estructura inicial para nuevo ingrediente
+
 const newIngredient = ref({
   nombre: '',
   cantidadKilos: 0,
@@ -41,16 +41,14 @@ const newIngredient = ref({
   proveedorId: null
 });
 
-const isEditing = ref(false); // Indica si se está editando un ingrediente
-const editingId = ref(null); // ID del ingrediente en edición
-const loading = ref(false); // Estado de carga
-const errorMessage = ref(''); // Mensaje de error
-const isModalVisible = ref(false); // Modal para ingredientes
-const isProviderModalVisible = ref(false); // Modal para añadir proveedores
-const isProviderInfoModalVisible = ref(false); // Modal específico para mostrar info del proveedor
-const currentProvider = ref(null); // Información del proveedor actual
-
-// Cargar proveedores
+const isEditing = ref(false); 
+const editingId = ref(null); 
+const loading = ref(false); 
+const errorMessage = ref(''); 
+const isModalVisible = ref(false); 
+const isProviderModalVisible = ref(false); 
+const isProviderInfoModalVisible = ref(false); 
+const currentProvider = ref(null); 
 const fetchProviders = async () => {
   try {
     providers.value = await ProviderService.getAllProviders();
@@ -59,13 +57,12 @@ const fetchProviders = async () => {
   }
 };
 
-// Cargar ingredientes
 const fetchIngredients = async () => {
   loading.value = true;
   errorMessage.value = '';
   try {
     ingredients.value = await IngredientService.getAllIngredients();
-    await fetchProviders(); // Cargar proveedores tras cargar ingredientes
+    await fetchProviders(); 
   } catch (error) {
     errorMessage.value = 'Error al cargar ingredientes';
   } finally {
@@ -73,21 +70,19 @@ const fetchIngredients = async () => {
   }
 };
 
-// Mostrar la información de un proveedor
 const showProviderInfo = async (proveedorId) => {
   try {
     currentProvider.value = providers.value.find(p => p.id === proveedorId);
     if (!currentProvider.value) {
       throw new Error('Proveedor no encontrado');
     }
-    isProviderModalVisible.value = false; // Asegurarse de que el modal de añadir esté cerrado
-    isProviderInfoModalVisible.value = true; // Abrir modal de información
+    isProviderModalVisible.value = false; 
+    isProviderInfoModalVisible.value = true; 
   } catch (error) {
     errorMessage.value = 'Error al cargar información del proveedor';
   }
 };
 
-// Eliminar un ingrediente
 const deleteIngredient = async (id) => {
   if (!confirm('¿Estás seguro de que quieres eliminar este ingrediente?')) return;
   errorMessage.value = '';
@@ -99,39 +94,35 @@ const deleteIngredient = async (id) => {
   }
 };
 
-// Editar un ingrediente
 const editIngredient = (ingredient) => {
   isEditing.value = true;
   editingId.value = ingredient.id;
-  newIngredient.value = { ...ingredient }; // Copia el ingrediente a editar
-  closeModal(); // Cierra otros modales
-  isModalVisible.value = true; // Abre modal de edición
+  newIngredient.value = { ...ingredient }; 
+  closeModal(); 
+  isModalVisible.value = true; 
 };
 
-// Abrir modal para crear ingrediente
+
 const openCreateModal = () => {
   isEditing.value = false;
   resetForm();
-  closeModal(); // Asegura que otros modales estén cerrados
-  isModalVisible.value = true; // Abre modal de ingredientes
+  closeModal(); 
+  isModalVisible.value = true; 
 };
 
-// Abrir modal para crear proveedor
 const openCreateProviderModal = () => {
   resetProviderForm();
-  closeModal(); // Asegura que otros modales estén cerrados
-  isProviderModalVisible.value = true; // Abre modal de proveedores
+  closeModal(); 
+  isProviderModalVisible.value = true; 
 };
 
-// Cerrar cualquier modal
 const closeModal = () => {
-  isModalVisible.value = false; // Cierra modal de ingredientes
-  isProviderModalVisible.value = false; // Cierra modal de proveedores
-  isProviderInfoModalVisible.value = false; // Cierra modal de información del proveedor
-  currentProvider.value = null; // Resetea el proveedor actual
+  isModalVisible.value = false; 
+  isProviderModalVisible.value = false; 
+  isProviderInfoModalVisible.value = false; 
+  currentProvider.value = null; 
 };
 
-// Enviar formulario de ingredientes
 const submitIngredientForm = async () => {
   errorMessage.value = '';
   try {
@@ -148,20 +139,18 @@ const submitIngredientForm = async () => {
   }
 };
 
-// Enviar formulario de proveedor
 const submitProviderForm = async () => {
   errorMessage.value = '';
   try {
     await ProviderService.createProvider(newProvider.value);
     resetProviderForm();
     await fetchProviders();
-    closeModal(); // Cerrar el modal de proveedor
+    closeModal(); 
   } catch (error) {
     errorMessage.value = `Error al crear el proveedor: ${error.message}`;
   }
 };
 
-// Resetea formulario de ingredientes
 const resetForm = () => {
   newIngredient.value = {
     nombre: '',
@@ -178,7 +167,6 @@ const resetForm = () => {
   editingId.value = null;
 };
 
-// Resetea formulario de proveedores
 const resetProviderForm = () => {
   newProvider.value = {
     nombre: '',
@@ -187,7 +175,7 @@ const resetProviderForm = () => {
   };
 };
 
-onMounted(fetchIngredients); // Cargar datos al montar el componente
+onMounted(fetchIngredients); 
 </script>
 
 <template>
@@ -210,28 +198,23 @@ onMounted(fetchIngredients); // Cargar datos al montar el componente
           <p><strong>Almacenamiento:</strong> {{ ingredient.almacenamiento }}</p>
           <p><strong>Categoría:</strong> {{ ingredient.categoria }}</p>
           <div class="button-group">
-  <!-- Botón de editar con icono de pluma -->
-  <button class="edit" @click="editIngredient(ingredient)">
-    <img src="../assets/images/Edit Property.svg" alt="Editar" class="icon" />
-  </button>
+          <button class="edit" @click="editIngredient(ingredient)">
+         <img src="../assets/icons/Edit Property.svg" alt="Editar" class="icon" />
+              </button>
+              <button class="provider" @click="showProviderInfo(ingredient.proveedorId)">
+                 Proveedor
+             </button>
 
-  <!-- Botón de información del proveedor (mantén el texto "Contacto Proveedor") -->
-  <button class="provider" @click="showProviderInfo(ingredient.proveedorId)">
-   Proveedor
-  </button>
-
-  <!-- Botón de eliminar con icono de basurero -->
-  <button class="delete" @click="deleteIngredient(ingredient.id)">
-    <img src="../assets/images/Delete.svg" alt="Eliminar" class="icon" />
-  </button>
-</div>
+                <button class="delete" @click="deleteIngredient(ingredient.id)">
+              <img src="../assets/icons/Delete.svg" alt="Eliminar" class="icon" />
+             </button>
+             </div>
 
         </div>
       </div>
     </div>
     <p v-else>No hay ingredientes en el inventario.</p>
 
-    <!-- Modal de Ingrediente -->
     <div v-if="isModalVisible" class="modal-overlay">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
@@ -290,7 +273,6 @@ onMounted(fetchIngredients); // Cargar datos al montar el componente
       </div>
     </div>
 
-    <!-- Modal de Proveedor -->
     <div v-if="isProviderModalVisible" class="modal-overlay">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
@@ -314,7 +296,6 @@ onMounted(fetchIngredients); // Cargar datos al montar el componente
       </div>
     </div>
 
-    <!-- Modal de Información del Proveedor -->
     <div v-if="isProviderInfoModalVisible" class="modal-overlay">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
@@ -400,8 +381,17 @@ h2 {
   display: flex;
   justify-content: space-between;
   margin-top: 15px;
-  width: 20px; /* Cambia el ancho según tus necesidades */
-  height: 40px; /* Cambia la altura según tus necesidades */
+  width: 20px;
+  height: 40px;
+  gap: 50px;
+  
+}
+.button-group button {
+  background-color: transparent; 
+  padding: 0; 
+  display: flex;
+  align-items: center;
+  cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
 }
 
 button {
@@ -413,7 +403,6 @@ button {
   transition: background-color 0.2s;
 }
 
-/* Estilos del Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -503,7 +492,6 @@ button.provider {
   overflow-y: auto;
 }
 
-/* Ajustamos el grid para que las tarjetas sean más anchas */
 .ingredient-grid {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }

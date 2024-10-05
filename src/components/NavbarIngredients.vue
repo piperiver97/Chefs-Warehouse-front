@@ -35,7 +35,6 @@
             </li>
           </ul>
           <div class="navbar-filter">
-            <FiltroIngredientes />
           </div>
         </div>
       </div>
