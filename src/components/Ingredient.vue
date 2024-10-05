@@ -210,10 +210,22 @@ onMounted(fetchIngredients); // Cargar datos al montar el componente
           <p><strong>Almacenamiento:</strong> {{ ingredient.almacenamiento }}</p>
           <p><strong>Categoría:</strong> {{ ingredient.categoria }}</p>
           <div class="button-group">
-            <button class="edit" @click="editIngredient(ingredient)">Editar</button>
-            <button class="provider" @click="showProviderInfo(ingredient.proveedorId)">Información Proveedor</button>
-            <button class="delete" @click="deleteIngredient(ingredient.id)">Eliminar</button>
-          </div>
+  <!-- Botón de editar con icono de pluma -->
+  <button class="edit" @click="editIngredient(ingredient)">
+    <img src="../assets/images/Edit Property.svg" alt="Editar" class="icon" />
+  </button>
+
+  <!-- Botón de información del proveedor (mantén el texto "Contacto Proveedor") -->
+  <button class="provider" @click="showProviderInfo(ingredient.proveedorId)">
+   Proveedor
+  </button>
+
+  <!-- Botón de eliminar con icono de basurero -->
+  <button class="delete" @click="deleteIngredient(ingredient.id)">
+    <img src="../assets/images/Delete.svg" alt="Eliminar" class="icon" />
+  </button>
+</div>
+
         </div>
       </div>
     </div>
@@ -388,6 +400,8 @@ h2 {
   display: flex;
   justify-content: space-between;
   margin-top: 15px;
+  width: 20px; /* Cambia el ancho según tus necesidades */
+  height: 40px; /* Cambia la altura según tus necesidades */
 }
 
 button {
@@ -397,20 +411,6 @@ button {
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.2s;
-}
-
-button.edit {
-  background-color: #3498db;
-  color: white;
-}
-
-button.delete {
-  background-color: #e74c3c;
-  color: white;
-}
-
-button:hover {
-  opacity: 0.9;
 }
 
 /* Estilos del Modal */
@@ -505,7 +505,7 @@ button.provider {
 
 /* Ajustamos el grid para que las tarjetas sean más anchas */
 .ingredient-grid {
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
 
 </style>
