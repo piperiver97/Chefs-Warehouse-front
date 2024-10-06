@@ -11,4 +11,5 @@ import Recipe from '@/components/Recipe.vue';
 
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

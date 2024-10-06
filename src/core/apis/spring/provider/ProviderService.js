@@ -6,7 +6,8 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
   withCredentials: true,
-});
+}); 
+//../core/apis/spring/Recipe/RecipeService//
 
 export default {
   // Obtener todos los proveedores

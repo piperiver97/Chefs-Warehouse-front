@@ -1,216 +1,253 @@
-<script setup>
-import { ref, onMounted } from 'vue';
-import { RecipeService } from '../core/apis';
-
-const recetas = ref([]);
-const recetaForm = ref({
-  nombre: '',
-  tiempo_preparacion: null,
-  tiempo_coccion: null,
-  porciones: null,
-  dificultad: 'FACIL',
-  elaboracion: '',
-  tecnicas_cocina: ''
-});
-const isEditing = ref(false);
-const editingId = ref(null);
-
-onMounted(async () => {
-  await fetchRecetas();
-});
-
-async function fetchRecetas() {
-  try {
-    const response = await RecipeService.getAllRecipes();
-    recetas.value = response.data;
-  } catch (error) {
-    console.error('Error al cargar las recetas:', error);
-  }
-}
-
-async function createReceta() {
-  try {
-    const response = await RecipeService.createRecipe(recetaForm.value);
-    recetas.value.push(response.data);
-    resetForm();
-    closeModal();
-  } catch (error) {
-    console.error('Error al crear la receta:', error);
-  }
-}
-
-async function updateReceta() {
-  try {
-    const response = await RecipeService.updateRecipe(editingId.value, recetaForm.value);
-    const index = recetas.value.findIndex(receta => receta.id === editingId.value);
-    if (index !== -1) {
-      recetas.value.splice(index, 1, response.data);
-    }
-    resetForm();
-    closeModal();
-  } catch (error) {
-    console.error('Error al actualizar la receta:', error);
-  }
-}
-
-async function deleteReceta(id) {
-  try {
-    await RecipeService.deleteRecipe(id);
-    recetas.value = recetas.value.filter(receta => receta.id !== id);
-  } catch (error) {
-    console.error('Error al eliminar la receta:', error);
-  }
-}
-
-function editReceta(receta) {
-  recetaForm.value = { ...receta };
-  isEditing.value = true;
-  editingId.value = receta.id;
-  const modal = new bootstrap.Modal(document.getElementById('recetaModal'));
-  modal.show();
-}
-
-function openCreateModal() {
-  resetForm();
-  const modal = new bootstrap.Modal(document.getElementById('recetaModal'));
-  modal.show();
-}
-
-function closeModal() {
-  const modal = bootstrap.Modal.getInstance(document.getElementById('recetaModal'));
-  modal.hide();
-}
-
-function resetForm() {
-  recetaForm.value = {
-    nombre: '',
-    tiempo_preparacion: null,
-    tiempo_coccion: null,
-    porciones: null,
-    dificultad: 'FACIL',
-    elaboracion: '',
-    tecnicas_cocina: ''
-  };
-  isEditing.value = false;
-  editingId.value = null;
-}
-
-function getDifficultyInSpanish(difficulty) {
-  const difficultyMap = {
-    'FACIL': 'Fácil',
-    'MEDIA': 'Media',
-    'DIFICIL': 'Difícil'
-  };
-  return difficultyMap[difficulty] || difficulty;
-}
-
-function formatTotalTime(prep, cooking) {
-  const total = prep + cooking;
-  const hours = Math.floor(total / 60);
-  const minutes = total % 60;
-  return hours > 0 
-    ? `${hours}h ${minutes}min`
-    : `${minutes}min`;
-}
-</script>
 <template>
-    <div class="container my-4">
-      <h1 class="text-center mb-4">Lista de Recetas</h1>
+    <div class="provider-container">
+      <h2>Proveedores</h2>
+      <button class="add-provider btn btn-success mb-3" @click="openCreateProviderModal">Añadir Proveedor</button>
       
-      <!-- Botón para crear receta -->
-      <button class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#recetaModal" @click="openCreateModal">
-        Crear Receta
-      </button>
-  
       <div class="row">
-        <div v-for="receta in recetas" :key="receta.id" class="col-md-4 mb-4">
-          <div class="card">
+        <div v-if="providers.length" class="col-md-4" v-for="provider in providers" :key="provider.id">
+          <div class="card mb-4">
             <div class="card-body">
-              <h5 class="card-title">{{ receta.nombre }}</h5>
-              <p class="card-text">
-                <strong>Tiempo de Preparación:</strong> {{ receta.tiempo_preparacion }} min<br>
-                <strong>Tiempo de Cocción:</strong> {{ receta.tiempo_coccion }} min<br>
-                <strong>Tiempo Total:</strong> {{ formatTotalTime(receta.tiempo_preparacion, receta.tiempo_coccion) }}<br>
-                <strong>Porciones:</strong> {{ receta.porciones }}<br>
-                <strong>Dificultad:</strong> {{ getDifficultyInSpanish(receta.dificultad) }}<br>
-                <strong>Técnicas de Cocina:</strong> {{ receta.tecnicas_cocina }}<br>
-              </p>
-              <p class="card-text">
-                <strong>Elaboración:</strong> {{ receta.elaboracion }}
-              </p>
-              <button class="btn btn-warning" @click="editReceta(receta)"> 
-                <img src="@/assets/icons/Edit Property.svg" alt="Edit" style="width: 16px; height: 16px;"/> Editar
-              </button>
-              <button class="btn btn-danger" @click="deleteReceta(receta.id)">
-                <img src="@/assets/icons/Delete.svg" alt="Delete" style="width: 16px; height: 16px;"/> Eliminar
-              </button>
+              <h5 class="card-title">{{ provider.nombre }}</h5>
+              <p><strong>Contacto:</strong> {{ provider.contacto }}</p>
+              <p><strong>Dirección:</strong> {{ provider.direccion }}</p>
+              <p><strong>Teléfono:</strong> {{ provider.telefono }}</p>
+              <p><strong>Correo Electrónico:</strong> {{ provider.correoElectronico }}</p>
+              <p><strong>Categoría:</strong> {{ provider.categoria }}</p>
+  
+              <button class="btn btn-primary" @click="openEditProviderModal(provider)">Editar</button>
+              <button class="btn btn-danger" @click="deleteProvider(provider.id)">Eliminar</button>
             </div>
           </div>
         </div>
       </div>
   
-      <!-- Modal para crear y editar receta -->
-      <div class="modal fade" id="recetaModal" tabindex="-1" aria-labelledby="recetaModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="recetaModalLabel">{{ isEditing ? 'Editar Receta' : 'Crear Receta' }}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div v-if="isProviderModalVisible" class="modal-overlay">
+        <div class="modal-content">
+          <span class="close" @click="closeModal">&times;</span>
+          <h3 v-if="isEditing">Editar Proveedor</h3>
+          <h3 v-else>Añadir Proveedor</h3>
+  
+          <form @submit.prevent="submitProviderForm">
+            <div class="form-group">
+              <label for="nombre">Nombre del Proveedor:</label>
+              <input id="nombre" v-model="newProvider.nombre" required />
             </div>
-            <div class="modal-body">
-              <form @submit.prevent="isEditing ? updateReceta() : createReceta()">
-                <div class="mb-3">
-                  <label for="nombre" class="form-label">Nombre</label>
-                  <input type="text" id="nombre" v-model="recetaForm.nombre" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                  <label for="tiempoPreparacion" class="form-label">Tiempo de Preparación (min)</label>
-                  <input type="number" id="tiempoPreparacion" v-model="recetaForm.tiempo_preparacion" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                  <label for="tiempoCoccion" class="form-label">Tiempo de Cocción (min)</label>
-                  <input type="number" id="tiempoCoccion" v-model="recetaForm.tiempo_coccion" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                  <label for="porciones" class="form-label">Porciones</label>
-                  <input type="number" id="porciones" v-model="recetaForm.porciones" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                  <label for="dificultad" class="form-label">Dificultad</label>
-                  <select id="dificultad" v-model="recetaForm.dificultad" class="form-select" required>
-                    <option value="FACIL">Fácil</option>
-                    <option value="MEDIA">Media</option>
-                    <option value="DIFICIL">Difícil</option>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="elaboracion" class="form-label">Elaboración</label>
-                  <textarea id="elaboracion" v-model="recetaForm.elaboracion" class="form-control" required></textarea>
-                </div>
-                <div class="mb-3">
-                  <label for="tecnicasCocina" class="form-label">Técnicas de Cocina</label>
-                  <input type="text" id="tecnicasCocina" v-model="recetaForm.tecnicas_cocina" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary">{{ isEditing ? 'Actualizar' : 'Crear' }}</button>
-              </form>
+            <div class="form-group">
+              <label for="contacto">Contacto:</label>
+              <input id="contacto" v-model="newProvider.contacto" required />
             </div>
-          </div>
+            <div class="form-group">
+              <label for="direccion">Dirección:</label>
+              <input id="direccion" v-model="newProvider.direccion" required />
+            </div>
+            <div class="form-group">
+              <label for="telefono">Teléfono:</label>
+              <input id="telefono" v-model="newProvider.telefono" required />
+            </div>
+            <div class="form-group">
+              <label for="correoElectronico">Correo Electrónico:</label>
+              <input id="correoElectronico" v-model="newProvider.correoElectronico" required />
+            </div>
+            <div class="form-group">
+              <label for="categoria">Tipo de Categoría:</label>
+              <select id="categoria" v-model="newProvider.categoria" required>
+                <option disabled value="">Seleccione una categoría</option>
+                <option v-for="categoria in categories" :key="categoria" :value="categoria">{{ categoria }}</option>
+              </select>
+            </div>
+            <button type="submit">{{ isEditing ? 'Guardar Cambios' : 'Crear Proveedor' }}</button>
+          </form>
+          <p v-if="errorMessage">{{ errorMessage }}</p>
         </div>
       </div>
     </div>
   </template>
   
- 
+  <script setup>
+  import { ref, onMounted } from 'vue';
+  import ProviderService from '../core/apis/spring/provider/ProviderService';
   
-  <style>
-  .card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    transition: transform 0.2s;
+  // Variables reactivas para manejar los proveedores, categorías y el estado del formulario
+  const providers = ref([]);
+  const categories = ref([]);
+  const newProvider = ref({
+    nombre: '',
+    contacto: '',
+    direccion: '',
+    telefono: '',
+    correoElectronico: '',
+    categoria: ''
+  });
+  const isProviderModalVisible = ref(false);
+  const errorMessage = ref('');
+  const isEditing = ref(false); // Para saber si estamos editando o creando
+  
+  let editingProviderId = null; // Guardamos el ID del proveedor que estamos editando
+  
+  // Función para obtener los proveedores desde el servicio (llamada a la API)
+  const fetchProviders = async () => {
+    try {
+      providers.value = await ProviderService.getAllProviders();
+    } catch (error) {
+      errorMessage.value = 'Error al cargar proveedores';
+    }
+  };
+  
+  // Función para obtener las categorías desde el backend
+  const fetchCategories = async () => {
+    try {
+      categories.value = await ProviderService.getCategories();
+    } catch (error) {
+      errorMessage.value = 'Error al cargar las categorías';
+    }
+  };
+  
+  // Función para abrir el modal de crear proveedor
+  const openCreateProviderModal = () => {
+    resetProviderForm();
+    isProviderModalVisible.value = true;
+    isEditing.value = false; // No estamos editando
+  };
+  
+  // Función para abrir el modal de editar proveedor
+  const openEditProviderModal = (provider) => {
+    newProvider.value = { ...provider }; // Cargamos los datos del proveedor
+    isProviderModalVisible.value = true;
+    isEditing.value = true; // Indicamos que estamos editando
+    editingProviderId = provider.id; // Guardamos el ID del proveedor
+  };
+  
+  // Función para cerrar el modal
+  const closeModal = () => {
+    isProviderModalVisible.value = false;
+  };
+  
+  // Función para enviar el formulario de crear/editar proveedor
+  const submitProviderForm = async () => {
+    errorMessage.value = '';
+    try {
+      if (isEditing.value) {
+        // Editar proveedor
+        await ProviderService.updateProvider(editingProviderId, newProvider.value);
+      } else {
+        // Crear nuevo proveedor
+        await ProviderService.createProvider(newProvider.value);
+      }
+      resetProviderForm();
+      await fetchProviders();
+      closeModal();
+    } catch (error) {
+      errorMessage.value = `Error al ${isEditing.value ? 'editar' : 'crear'} el proveedor: ${error.message}`;
+    }
+  };
+  
+  // Función para eliminar un proveedor
+  const deleteProvider = async (id) => {
+    try {
+      await ProviderService.deleteProvider(id);
+      await fetchProviders(); // Recargar lista después de eliminar
+    } catch (error) {
+      errorMessage.value = 'Error al eliminar el proveedor';
+    }
+  };
+  
+  // Función para resetear el formulario
+  const resetProviderForm = () => {
+    newProvider.value = {
+      nombre: '',
+      contacto: '',
+      direccion: '',
+      telefono: '',
+      correoElectronico: '',
+      categoria: ''
+    };
+    editingProviderId = null;
+    isEditing.value = false;
+  };
+  
+  // Al montar el componente, cargamos los proveedores y las categorías
+  onMounted(async () => {
+    await fetchProviders();
+    await fetchCategories();
+  });
+  </script>
+  
+  <style scoped>
+  .provider-container {
+    padding: 20px;
   }
   
-  .card:hover {
-    transform: scale(1.05);
+  .provider-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Muestra 2 elementos en pantallas más grandes y ajusta en pantallas más pequeñas */
+    gap: 20px; /* Espaciado entre los elementos */
+  }
+  
+  .provider-item {
+    background-color: #ecf0f1;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  
+  .provider-item p {
+    margin: 5px 0;
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+  }
+  
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
   }
   </style>
   
