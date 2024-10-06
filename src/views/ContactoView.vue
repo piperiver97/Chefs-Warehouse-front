@@ -1,16 +1,19 @@
 <script setup>
 import Navbar from "@/components/Navbar.vue";
+import Servicios from "@/components/Servicios.vue";
+
 </script>
 
 <template>
-  <div>
+  <div class="Contacto">
     <Navbar />
-    <h1>CONTACTO</h1>
-    
+    <Servicios/>
   </div>
 </template>
 
 
 <style scoped>
-/* Aquí puedes agregar estilos específicos para este componente */
+.Contacto{
+  background-color: black;
+}
 </style>

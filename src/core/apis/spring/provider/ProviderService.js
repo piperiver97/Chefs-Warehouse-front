@@ -34,7 +34,7 @@ export default {
   // Obtener categorías
   getCategories: async () => {
     try {
-      const response = await axiosInstance.get('/categorias');
+      const response = await axiosInstance.get('http://localhost:8080/api/v1/proveedores/categorias');
       return response.data;
     } catch (error) {
       console.error('Error al obtener categorías:', error);

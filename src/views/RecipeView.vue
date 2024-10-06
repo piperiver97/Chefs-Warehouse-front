@@ -1,12 +1,12 @@
 <script setup>
 import NavbarIngredients from '@/components/NavbarIngredients.vue';
-
+import Recipe from '@/components/Recipe.vue';
 
 </script>
 <template>
 <NavbarIngredients/> 
-  
-<h1>recipe</h1>
+<Recipe/>  
+
  
 
 </template>
