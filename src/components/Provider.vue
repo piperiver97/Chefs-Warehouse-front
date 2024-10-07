@@ -382,7 +382,6 @@ form button:hover {
   background-color: #27ae60;
 }
 
-/* Error message styling */
 p[v-if="errorMessage"] {
   color: #e74c3c;
   margin-top: 15px;

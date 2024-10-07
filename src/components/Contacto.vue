@@ -64,7 +64,7 @@ const handleContact = (contact) => {
       <div class="row g-4">
         <div v-for="(contact, index) in contactMethods" 
              :key="index" 
-             class="col-lg-4 col-md-6 col-sm-12"> <!-- Ajuste para pantallas pequeñas -->
+             class="col-lg-4 col-md-6 col-sm-12"> 
           <div class="contact-card" 
                :class="{ 'active': hoveredCard === index }"
                @mouseenter="hoveredCard = index"

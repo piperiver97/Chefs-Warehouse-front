@@ -8,7 +8,6 @@ import Footer from './components/Footer.vue';
 const isLoading = ref(false);
 const router = useRouter();
 
-// Escuchamos los cambios de ruta para iniciar y detener el loading
 router.beforeEach((to, from, next) => {
   isLoading.value = true;
   next();
@@ -25,13 +24,12 @@ router.afterEach(() => {
   <div id="app">
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
-        <div> <!-- Aquí se envuelve el componente en un div -->
+        <div> 
           <component :is="Component" />
         </div>
       </transition>
     </router-view>
     
-    <!-- Cargando vegetales -->
     <VegetableLoading v-if="isLoading" />
   </div>
   <Footer/>
