@@ -8,42 +8,52 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-const RecipeService = {
-  getAllRecipes: async () => {
-    try {
-      const response = await axiosInstance.get('http://localhost:8080/api/v1/recetas');
-      return response.data;
-    } catch (error) {
-      console.error('Error al obtener recetas:', error);
-      return [];
-    }
-  },
-  createRecipe: async (recipe) => {
-    try {
-      const response = await axiosInstance.post('http://localhost:8080/api/v1/recetas', recipe);
-      return response.data;
-    } catch (error) {
-      console.error('Error al crear receta:', error);
-      return null;
-    }
-  },
-  updateRecipe: async (id, recipe) => {
-    try {
-      const response = await axiosInstance.put(`http://localhost:8080/api/v1/recetas/${id}`, recipe);
-      return response.data;
-    } catch (error) {
-      console.error(`Error al actualizar la receta con ID: ${id}`, error);
-      throw new Error('Error al actualizar la receta');
-    }
-  },
-  deleteRecipe: async (id) => {
-    try {
-      await axiosInstance.delete(`http://localhost:8080/api/v1/recetas/${id}`);
-    } catch (error) {
-      console.error(`Error al eliminar la receta con ID: ${id}`, error);
-      throw new Error('Error al eliminar la receta');
-    }
-  },
+// Función para transformar el formato del frontend al backend
+const transformToBackendFormat = (recipe) => {
+  return {
+    nombre: recipe.nombre,
+    tiempoPreparacion: parseInt(recipe.tiempo_preparacion) || 0,
+    tiempoCoccion: parseInt(recipe.tiempo_coccion) || 0,
+    porciones: parseInt(recipe.porciones) || 0,
+    dificultad: recipe.dificultad,
+    elaboracion: recipe.elaboracion,
+    tecnicasCocina: recipe.tecnicas_cocina || '',
+  };
 };
 
-export default RecipeService;
+// Función para transformar el formato del backend al frontend
+const transformToFrontendFormat = (recipe) => {
+  return {
+    id: recipe.id,
+    nombre: recipe.nombre,
+    tiempo_preparacion: recipe.tiempoPreparacion,
+    tiempo_coccion: recipe.tiempoCoccion,
+    porciones: recipe.porciones,
+    dificultad: recipe.dificultad,
+    elaboracion: recipe.elaboracion,
+    tecnicas_cocina: recipe.tecnicasCocina,
+  };
+};
+
+export default {
+  async getAllRecipes() {
+    const response = await axiosInstance.get('');
+    return response.data.map(transformToFrontendFormat);
+  },
+
+  async createRecipe(recipe) {
+    const backendRecipe = transformToBackendFormat(recipe);
+    const response = await axiosInstance.post('', backendRecipe);
+    return transformToFrontendFormat(response.data);
+  },
+
+  async updateRecipe(id, recipe) {
+    const backendRecipe = transformToBackendFormat(recipe);
+    const response = await axiosInstance.put(`/${id}`, backendRecipe);
+    return transformToFrontendFormat(response.data);
+  },
+
+  async deleteRecipe(id) {
+    await axiosInstance.delete(`/${id}`);
+  }
+};
