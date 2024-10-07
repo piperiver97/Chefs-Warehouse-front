@@ -1,51 +1,3 @@
-
-<script setup>
-import { ref } from 'vue';
-import FilterService from '../core/apis/spring/ingredient/FIlterService';
-
-const filtros = ref({
-  nombre: '',
-  tipoMedida: '',
-  almacenamiento: '',
-  fechaCaducidad: ''
-});
-
-const ingredientesFiltrados = ref([]);
-const busquedaRealizada = ref(false);
-
-const aplicarFiltros = async () => {
-  try {
-    busquedaRealizada.value = true;
-    ingredientesFiltrados.value = await FilterService.filtrarIngredientes(filtros.value);
-  } catch (error) {
-    console.error('Error al aplicar filtros:', error);
-  }
-};
-
-const limpiarFiltros = () => {
-  filtros.value = {
-    nombre: '',
-    tipoMedida: '',
-    almacenamiento: '',
-    fechaCaducidad: ''
-  };
-  ingredientesFiltrados.value = [];
-  busquedaRealizada.value = false;
-};
-
-const obtenerCantidad = (ingrediente) => {
-  if (ingrediente.cantidadKilos > 0) return `${ingrediente.cantidadKilos} kg`;
-  if (ingrediente.cantidadGramos > 0) return `${ingrediente.cantidadGramos} g`;
-  if (ingrediente.cantidadUnidades > 0) return `${ingrediente.cantidadUnidades} unidades`;
-  return 'N/A';
-};
-
-const formatearFecha = (fecha) => {
-  if (!fecha) return 'N/A';
-  return new Date(fecha).toLocaleDateString();
-};
-</script>
-
 <template>
   <div class="filtros kitchen-theme">
     <div class="filtro-ingredientes">
@@ -59,6 +11,9 @@ const formatearFecha = (fecha) => {
             placeholder="Buscar por nombre..."
           />
           
+          <!-- Buscador de voz -->
+          <BuscadorVoz @resultado="actualizarBusqueda" />
+
           <select
             id="tipoMedida"
             v-model="filtros.tipoMedida"
@@ -125,6 +80,59 @@ const formatearFecha = (fecha) => {
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import FilterService from '../core/apis/spring/ingredient/FIlterService';
+import BuscadorVoz from './Search.vue'; // Importa el nuevo componente
+
+const filtros = ref({
+  nombre: '',
+  tipoMedida: '',
+  almacenamiento: '',
+  fechaCaducidad: ''
+});
+
+const ingredientesFiltrados = ref([]);
+const busquedaRealizada = ref(false);
+
+const aplicarFiltros = async () => {
+  try {
+    busquedaRealizada.value = true;
+    ingredientesFiltrados.value = await FilterService.filtrarIngredientes(filtros.value);
+  } catch (error) {
+    console.error('Error al aplicar filtros:', error);
+  }
+};
+
+const limpiarFiltros = () => {
+  filtros.value = {
+    nombre: '',
+    tipoMedida: '',
+    almacenamiento: '',
+    fechaCaducidad: ''
+  };
+  ingredientesFiltrados.value = [];
+  busquedaRealizada.value = false;
+};
+
+const actualizarBusqueda = (nuevoNombre) => {
+  filtros.value.nombre = nuevoNombre; // Actualiza el filtro de nombre con el resultado de la voz
+  aplicarFiltros(); // Vuelve a aplicar los filtros
+};
+
+const obtenerCantidad = (ingrediente) => {
+  if (ingrediente.cantidadKilos > 0) return `${ingrediente.cantidadKilos} kg`;
+  if (ingrediente.cantidadGramos > 0) return `${ingrediente.cantidadGramos} g`;
+  if (ingrediente.cantidadUnidades > 0) return `${ingrediente.cantidadUnidades} unidades`;
+  return 'N/A';
+};
+
+const formatearFecha = (fecha) => {
+  if (!fecha) return 'N/A';
+  return new Date(fecha).toLocaleDateString();
+};
+</script>
 
 <style scoped>
 .kitchen-theme {
