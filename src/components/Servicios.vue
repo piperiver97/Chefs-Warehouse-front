@@ -1,220 +1,122 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const hoveredCard = ref(null)
+const topFeatures = ref([
+  'Gestión eficiente de inventarios',
+  'Organización de ingredientes simplificada',
+  'Acceso a una lista de proveedores de confianza',
+  'Soporte técnico disponible las 24 horas'
+]);
 
-const services = ref([
+const bottomFeatures = ref([
   {
-    title: 'Sistema de Gestión 4.0',
-    description: 'Plataforma inteligente que revoluciona el control de tu inventario',
-    icon: 'fas fa-microchip',
-    features: [
-      'IA para predicción de demanda',
-      'Dashboard en tiempo real',
-      'Automatización de pedidos',
-      'Analítica avanzada'
-    ]
+    title: 'Gestión eficiente de inventarios',
+    description: 'Manejamos tu inventario con precisión, minimizando pérdidas y optimizando recursos para que tu negocio crezca.'
   },
   {
-    title: 'Almacenamiento Inteligente',
-    description: 'Espacios optimizados con tecnología de vanguardia',
-    icon: 'fas fa-network-wired',
-    features: [
-      'Sensores IoT de temperatura',
-      'Sistema RFID de tracking',
-      'Optimización de espacio con IA',
-      'Seguridad biométrica'
-    ]
+    title: 'Organización de ingredientes simplificada',
+    description: 'Clasificamos y organizamos tus ingredientes, facilitando el acceso y mejorando la eficiencia en la cocina.'
   },
   {
-    title: 'Logística Predictiva',
-    description: 'Distribución optimizada con algoritmos avanzados',
-    icon: 'fas fa-robot',
-    features: [
-      'Rutas optimizadas por IA',
-      'Predicción de tiempos exacta',
-      'Flota conectada en tiempo real',
-      'Embalaje inteligente'
-    ]
-  }
-])
+    title: 'Recetas personalizadas para cada cliente',
+    description: 'Desarrollamos recetas que se adaptan a tus necesidades y preferencias, garantizando la satisfacción de tus clientes.'
+  },
+  {
+    title: 'Acceso a una lista de proveedores de confianza',
+    description: 'Te conectamos con proveedores de calidad, asegurando que siempre tengas los mejores ingredientes disponibles.'
+  },
+ 
+  {
+    title: 'Informes de inventario en tiempo real',
+    description: 'Accede a informes detallados sobre tu inventario en cualquier momento, lo que te permite tomar decisiones informadas.'
+  },
+ 
+]);
 </script>
+
+  
 <template>
-      <div class="container services-section py-5">
-        <h2 class="text-center mb-5 section-title">
-          Revoluciona tu Inventario con Tecnología de Punta
-        </h2>
-        <div class="row g-4">
-          <div v-for="(service, index) in services" 
-               :key="index" 
-               class="col-lg-4 col-md-6">
-            <div class="service-card" 
-                 :class="{ 'active': hoveredCard === index }"
-                 @mouseenter="hoveredCard = index"
-                 @mouseleave="hoveredCard = null">
-              <div class="service-icon">
-                <i :class="service.icon"></i>
+    <div>
+      <!-- First Section -->
+      <section class="position-relative py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-lg-5">
+              <img class="img-fluid mb-5 d-lg-none" src="" alt="">
+              <h2 class="display-5 mb-4 fw-bold text-white">¿Quienes somos?</h2>
+              <p class="lead text-muted mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque massa nibh, pulvinar vitae aliquet nec, accumsan aliquet orci.</p>
+              
+              <div v-for="(feature, index) in topFeatures" :key="'top-' + index" class="d-flex mb-3">
+                <div class="text-muted">
+                  <svg style="width: 32px; height: 32px;" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M25.6 22.9C25.7 23 25.8 23 26 23H33C33.6 23 34 22.6 34 22C34 21.8 34 21.7 33.9 21.6L30.4 14.6C30.1 14.1 29.5 13.9 29 14.2C28.9 14.3 28.7 14.4 28.6 14.6L25.1 21.6C24.9 22 25.1 22.6 25.6 22.9ZM29.5 17.2L31.4 21H27.6L29.5 17.2ZM18.5 14C16 14 14 16 14 18.5C14 21 16 23 18.5 23C21 23 23 21 23 18.5C23 16 21 14 18.5 14ZM18.5 21C17.1 21 16 19.9 16 18.5C16 17.1 17.1 16 18.5 16C19.9 16 21 17.1 21 18.5C21 19.9 19.9 21 18.5 21ZM22.7 25.3C22.3 24.9 21.7 24.9 21.3 25.3L18.5 28.1L15.7 25.3C15.3 24.9 14.7 24.9 14.3 25.3C13.9 25.7 13.9 26.3 14.3 26.7L17.1 29.5L14.3 32.3C13.9 32.7 13.9 33.3 14.3 33.7C14.7 34.1 15.3 34.1 15.7 33.7L18.5 30.9L21.3 33.7C21.7 34.1 22.3 34.1 22.7 33.7C23.1 33.3 23.1 32.7 22.7 32.3L19.9 29.5L22.7 26.7C23.1 26.3 23.1 25.7 22.7 25.3ZM33 25H26C25.4 25 25 25.4 25 26V33C25 33.6 25.4 34 26 34H33C33.6 34 34 33.6 34 33V26C34 25.4 33.6 25 33 25ZM32 32H27V27H32V32Z" fill="#3d8bfd" />
+                    <circle cx="24" cy="24" r="23.5" stroke="#6ea8fe" />
+                    
+                  </svg>
+                </div>
+
+                <div class="ms-3">
+                  <h5 class="fw-normal gradient-text">{{ feature }}</h5>
+                  
+                </div>
               </div>
-              <h3 class="service-title">{{ service.title }}</h3>
-              <p class="service-description">{{ service.description }}</p>
-              <ul class="service-features">
-                <li v-for="(feature, fIndex) in service.features" 
-                    :key="fIndex">
-                  {{ feature }}
-                </li>
-              </ul>
-              <button class="btn btn-primary service-btn">Explorar Servicio</button>
+            </div>
+            <div class="col-12 col-lg-6 mb-5 mb-lg-0">
+              <img class="img-fluid" src="../assets/images/Imagenq.jpg" alt="">
+            </div>
+            <div class="d-none d-lg-block position-absolute top-0 end-0 h-100" 
+                 style="width: 50%; background-image: url('../assets/images/daas.jpg'); background-repeat: no-repeat; background-size: cover;">
             </div>
           </div>
         </div>
-      </div>
-    
-  </template>
+      </section>
   
- 
+      <section class="py-5">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-12 col-lg-6 mb-5 mb-lg-0">
+              <img class="img-fluid" src="../assets/images/daas.jpg" alt="">
+            </div>
+            <div class="col-12 col-lg-5 ms-auto">
+              <div>
+                <h2 class="display-5 mb-5 fw-bold text-white">¿Porque elegir nuestra empresa?</h2>
+                
+                <div v-for="(feature, index) in bottomFeatures" :key="'bottom-' + index" class="d-flex mb-4">
+                  <div class="text-primary me-2">
+                    <svg style="width: 24px; height: 24px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="gradient-text">{{ feature.title }}</h4>
+                    <p class="text-muted">{{ feature.description }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+</template>
+
+  
   
   <style scoped>
-  .dark-theme {
-    background-color: #000000;
-    color: #ffffff;
-  }
-  
-  .hero-section {
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  .carousel-item {
-    height: 100vh;
-  }
-  
-  .carousel-item img {
-    object-fit: cover;
-    filter: brightness(0.3);
-  }
-  
-  .carousel-caption {
-    top: 50%;
-    transform: translateY(-50%);
-    bottom: auto;
-  }
-  
-  .text-gradient {
+  .text-white {
     background: linear-gradient(90deg, #007bff, #00ff88);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    text-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+    background-clip: text; 
+    color: transparent;  
   }
   
-  .section-title {
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    background: linear-gradient(90deg, #007bff, #00ff88);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+  .text-muted {
+    color: #ffffff !important; 
   }
   
-  .service-card {
-    background: linear-gradient(145deg, #0c1e3d, #162a47);
-    border-radius: 20px;
-    padding: 2rem;
-    height: 100%;
-    transition: all 0.3s ease;
-    border: 1px solid #1e3a5f;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 123, 255, 0.1);
+  .gradient-text {
+     color: aliceblue;
   }
   
-  .service-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(145deg, rgba(0,123,255,0.1), rgba(0,255,136,0.1));
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  
-  .service-card.active {
-    transform: translateY(-10px);
-  }
-  
-  .service-card.active::before {
-    opacity: 1;
-  }
-  
-  .service-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-    color: #00ff88;
-    transition: all 0.3s ease;
-  }
-  
-  .service-card.active .service-icon {
-    color: #007bff;
-  }
-  
-  .service-title {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: #ffffff;
-  }
-  
-  .service-description {
-    margin-bottom: 1.5rem;
-    color: #a3b3c9;
-  }
-  
-  .service-features {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 1.5rem;
-  }
-  
-  .service-features li {
-    margin-bottom: 0.5rem;
-    color: #ffffff;
-    position: relative;
-    padding-left: 1.5rem;
-  }
-  
-  .service-features li::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    color: #00ff88;
-  }
-  
-  .service-btn {
-    background: linear-gradient(90deg, #007bff, #00ff88);
-    border: none;
-    color: #ffffff;
-    font-weight: bold;
-    padding: 0.75rem 1.5rem;
-    border-radius: 50px;
-    transition: all 0.3s ease;
-  }
-  
-  .service-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
-  }
-  
-  @media (max-width: 768px) {
-    .text-gradient {
-      font-size: 2.5rem;
-    }
-    
-    .section-title {
-      font-size: 2rem;
-    }
-  }
   </style>

@@ -1,14 +1,14 @@
 <script setup>
 
 import Navbar from "@/components/Navbar.vue";
-import ServiceBanner from "@/components/ServiceBanner.vue";
+import Servicios from "@/components/Servicios.vue";
 
 </script>
 <template>
  <main> 
   <Navbar></Navbar>
-<ServiceBanner/>
 
+  <Servicios/>
  </main> 
 </template>
 

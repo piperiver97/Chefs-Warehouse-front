@@ -1,13 +1,15 @@
 <script setup>
 import Navbar from "@/components/Navbar.vue";
-import Servicios from "@/components/Servicios.vue";
+
+import Contacto from "@/components/Contacto.vue";
 
 </script>
 
 <template>
   <div class="Contacto">
     <Navbar />
-    <Servicios/>
+    <Contacto/>
+   
   </div>
 </template>
 
