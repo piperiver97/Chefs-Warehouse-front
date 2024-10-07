@@ -65,7 +65,6 @@
   import { ref, onMounted } from 'vue';
   import ProviderService from '../core/apis/spring/provider/ProviderService';
   
-  // Variables reactivas para manejar los proveedores, categorías y el estado del formulario
   const providers = ref([]);
   const categories = ref([]);
   const newProvider = ref({
@@ -74,15 +73,14 @@
     direccion: '',
     telefono: '',
     correoElectronico: '',
-    categoria: '' // Cambié a 'categoria'
+    categoria: '' 
   });
   const isProviderModalVisible = ref(false);
   const errorMessage = ref('');
-  const isEditing = ref(false);  // Para saber si estamos editando o creando
+  const isEditing = ref(false);  
   
-  let editingProviderId = null; // Guardamos el ID del proveedor que estamos editando
+  let editingProviderId = null; 
   
-  // Función para obtener los proveedores desde el servicio (llamada a la API)
   const fetchProviders = async () => {
     try {
       providers.value = await ProviderService.getAllProviders();
@@ -91,7 +89,6 @@
     }
   };
   
-  // Función para obtener las categorías desde el backend
   const fetchCategories = async () => {
     try {
       categories.value = await ProviderService.getCategories();
@@ -100,35 +97,29 @@
     }
   };
   
-  // Función para abrir el modal de crear proveedor
   const openCreateProviderModal = () => {
     resetProviderForm();
     isProviderModalVisible.value = true;
-    isEditing.value = false; // No estamos editando
+    isEditing.value = false; 
   };
   
-  // Función para abrir el modal de editar proveedor
   const openEditProviderModal = (provider) => {
-    newProvider.value = { ...provider }; // Cargamos los datos del proveedor
+    newProvider.value = { ...provider }; 
     isProviderModalVisible.value = true;
-    isEditing.value = true; // Indicamos que estamos editando
-    editingProviderId = provider.id; // Guardamos el ID del proveedor
+    isEditing.value = true; 
+    editingProviderId = provider.id;
   };
   
-  // Función para cerrar el modal
   const closeModal = () => {
     isProviderModalVisible.value = false;
   };
   
-  // Función para enviar el formulario de crear/editar proveedor
   const submitProviderForm = async () => {
     errorMessage.value = '';
     try {
       if (isEditing.value) {
-        // Editar proveedor
         await ProviderService.updateProvider(editingProviderId, newProvider.value);
       } else {
-        // Crear nuevo proveedor
         await ProviderService.createProvider(newProvider.value);
       }
       resetProviderForm();
@@ -139,17 +130,15 @@
     }
   };
   
-  // Función para eliminar un proveedor
   const deleteProvider = async (id) => {
     try {
       await ProviderService.deleteProvider(id);
-      await fetchProviders(); // Recargar lista después de eliminar
+      await fetchProviders(); 
     } catch (error) {
       errorMessage.value = 'Error al eliminar el proveedor';
     }
   };
   
-  // Función para resetear el formulario
   const resetProviderForm = () => {
     newProvider.value = {
       nombre: '',
@@ -157,13 +146,12 @@
       direccion: '',
       telefono: '',
       correoElectronico: '',
-      categoria: '' // Cambié a 'categoria' aquí también
+      categoria: ''
     };
     editingProviderId = null;
     isEditing.value = false;
   };
   
-  // Al montar el componente, cargamos los proveedores y las categorías
   onMounted(async () => {
     await fetchProviders();
     await fetchCategories();
@@ -173,10 +161,9 @@
   <style scoped>
   .provider-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Muestra 2 elementos en pantallas más grandes y ajusta en pantallas más pequeñas */
-    gap: 20px; /* Espaciado entre los elementos */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 20px; 
   }
-  
   .provider-item {
     background-color: #ecf0f1;
     padding: 15px;
@@ -243,5 +230,182 @@
     font-size: 1.1rem;
     cursor: pointer;
   }
+  .provider-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h2 {
+  color: #2c3e50;
+  margin-bottom: 24px;
+  font-size: 2rem;
+}
+
+.add-provider {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 24px;
+}
+
+.add-provider:hover {
+  background-color: #2ecc71;
+}
+
+.provider-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.provider-item {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.provider-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.provider-item p {
+  margin: 10px 0;
+  color: #34495e;
+}
+
+.provider-item p strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.provider-item button {
+  margin-top: 15px;
+  margin-right: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.provider-item button:first-of-type {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.provider-item button:last-of-type {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.provider-item button:hover {
+  opacity: 0.9;
+}
+
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+  font-size: 24px;
+  color: #7f8c8d;
+  transition: color 0.3s;
+}
+
+.close:hover {
+  color: #34495e;
+}
+
+.modal-content h3 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  color: #34495e;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #bdc3c7;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+form button {
+  background-color: #2ecc71;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+form button:hover {
+  background-color: #27ae60;
+}
+
+/* Error message styling */
+p[v-if="errorMessage"] {
+  color: #e74c3c;
+  margin-top: 15px;
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .provider-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-content {
+    padding: 20px;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  .add-provider {
+    width: 100%;
+  }
+}
   </style>
   

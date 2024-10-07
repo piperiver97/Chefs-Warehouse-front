@@ -12,11 +12,23 @@ const navItems = ref([
   <section>
     <nav class="navbar navbar-dark navbar-expand-lg bg-black py-3">
       <div class="container-fluid">
-        <!-- Cambiamos el <a> por <router-link> -->
         <router-link class="navbar-brand ms-4" to="/">
           <img class="img-fluid logo" src="../assets/images/logo.png" alt="Gradia Logo" />
         </router-link>
-        <div class="collapse navbar-collapse justify-content-center">
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item px-4" v-for="item in navItems" :key="item.name">
               <router-link class="nav-link d-inline-block p-0" :to="item.link">
@@ -25,21 +37,25 @@ const navItems = ref([
             </li>
           </ul>
         </div>
-        
-        </div>
+
         <div class="d-lg-none me-4">
           <button class="btn navbar-burger p-0">
-            <svg class="text-white" width="51" height="51" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            
               <rect width="56" height="56" rx="28" fill="currentColor" />
-              <path d="M37 32H19M37 24H19" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+              <path
+                d="M37 32H19M37 24H19"
+                stroke="black"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+          
           </button>
         </div>
+      </div>
     </nav>
   </section>
 </template>
-
-
 
 
 <style scoped>
@@ -54,13 +70,30 @@ const navItems = ref([
 .logo {
   max-width: 130px;
   height: auto;
-  margin-left: 100px;
+  margin-left: 20px;
 }
 
-.navbar-brand {
-  display: flex;
-  align-items: center;
+@media (max-width: 576px) {
+  .logo {
+    max-width: 100px;
+    margin-left: 0;
+  }
+
+  .navbar {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 
-/* Add any additional styles if needed */
+@media (max-width: 768px) {
+  .navbar-brand {
+    justify-content: center;
+    margin-left: 0;
+  }
+  
+  .nav-item {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
 </style>

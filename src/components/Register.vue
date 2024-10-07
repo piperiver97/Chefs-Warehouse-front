@@ -1,5 +1,43 @@
+
+<script>
+export default {
+  data() {
+    return {
+      fullName: '',
+      email: '',
+      password: '',
+      agreed: false,
+    };
+  },
+  computed: {
+    gradientStyle() {
+      return {
+        padding: '1px',
+        background: 'linear-gradient(90deg, rgba(108,213,246,1) 0%, rgba(248,157,92,1) 50%, rgba(91,106,240,1) 100%)',
+        borderRadius: '3px',
+      };
+    },
+    buttonStyle() {
+      return {
+        letterSpacing: '1px',
+        background: 'linear-gradient(98.24deg, #56C1E3 0%, #5B6AF0 100%)',
+      };
+    }
+  },
+  methods: {
+    handleSubmit() {
+      console.log('Formulario enviado con:', {
+        fullName: this.fullName,
+        email: this.email,
+        password: this.password,
+        agreed: this.agreed,
+      });
+    }
+  }
+};
+</script>
 <template>
-  <div> <!-- Un solo elemento raíz -->
+  <div> 
     <section class="pt-20 pb-32 bg-black overflow-hidden">
       <div class="container">
         <div class="text-center">
@@ -53,45 +91,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      fullName: '',
-      email: '',
-      password: '',
-      agreed: false,
-    };
-  },
-  computed: {
-    gradientStyle() {
-      return {
-        padding: '1px',
-        background: 'linear-gradient(90deg, rgba(108,213,246,1) 0%, rgba(248,157,92,1) 50%, rgba(91,106,240,1) 100%)',
-        borderRadius: '3px',
-      };
-    },
-    buttonStyle() {
-      return {
-        letterSpacing: '1px',
-        background: 'linear-gradient(98.24deg, #56C1E3 0%, #5B6AF0 100%)',
-      };
-    }
-  },
-  methods: {
-    handleSubmit() {
-      // Manejar la sumisión del formulario
-      console.log('Formulario enviado con:', {
-        fullName: this.fullName,
-        email: this.email,
-        password: this.password,
-        agreed: this.agreed,
-      });
-    }
-  }
-};
-</script>
 
 <style scoped>
-/* Agrega cualquier estilo específico que necesites aquí */
 </style>

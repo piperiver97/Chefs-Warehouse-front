@@ -53,7 +53,6 @@ const handleContact = (contact) => {
 </script>
 <template>
   <div class="dark-theme">
-    <!-- Hero Section -->
     <div class="hero-section">
       <div class="hero-content">
         <h1 class="display-3 fw-bold text-gradient">Contacta con Nosotros</h1>
@@ -61,12 +60,11 @@ const handleContact = (contact) => {
       </div>
     </div>
 
-    <!-- Sección de Contacto -->
     <div class="container contact-section py-5">
       <div class="row g-4">
         <div v-for="(contact, index) in contactMethods" 
              :key="index" 
-             class="col-lg-4 col-md-6">
+             class="col-lg-4 col-md-6 col-sm-12"> <!-- Ajuste para pantallas pequeñas -->
           <div class="contact-card" 
                :class="{ 'active': hoveredCard === index }"
                @mouseenter="hoveredCard = index"
@@ -230,6 +228,50 @@ const handleContact = (contact) => {
 .contact-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+}
+@media (max-width: 768px) {
+  .text-gradient {
+    font-size: 2.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .contact-card {
+    padding: 1.5rem;
+  }
+
+  .contact-icon {
+    font-size: 2rem;
+  }
+
+  .contact-title {
+    font-size: 1.2rem;
+  }
+
+  .contact-description {
+    font-size: 0.9rem;
+  }
+
+  .contact-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .contact-section {
+    padding: 2rem 1rem;
+  }
+
+  .contact-title {
+    font-size: 1rem;
+  }
+
+  .contact-description {
+    font-size: 0.85rem;
+  }
 }
 
 @media (max-width: 768px) {

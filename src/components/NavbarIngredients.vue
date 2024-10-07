@@ -48,7 +48,7 @@
   }
   .kitchen-navbar {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    background: linear-gradient(to right, #000000, #333333) !important;
+    background: linear-gradient(135deg, #000000, #1a1a1a) !important;
   }
   
   .navbar-brand {

@@ -23,7 +23,6 @@ const handleSubmit = async () => {
     console.log('User role:', authStore.user.roles);
 
     if (success) {
-      // Redirigir según el rol
       if (authStore.user.roles.includes('ADMIN')) {
         console.log('Redirecting to admin view');
         await router.push('/adminview');
@@ -44,9 +43,8 @@ const handleSubmit = async () => {
 };
 
 </script>
-
 <template>
-  <div>
+  <div class="container">
     <form @submit.prevent="handleSubmit">
       <div class="row mb-4 g-4">
         <div class="col-12">
@@ -54,15 +52,18 @@ const handleSubmit = async () => {
             <label class="fs-18 fw-medium text-white mb-3" for="username">
               Ingrese su usuario
             </label>
-            <div class="rounded-1" style="padding: 1px; background: linear-gradient(90deg, rgba(108,213,246,1) 0%, rgba(248,157,92,1) 50%, rgba(91,106,240,1) 100%);">
+            <div
+              class="rounded-1"
+              style="padding: 1px; background: linear-gradient(90deg, rgba(108,213,246,1) 0%, rgba(248,157,92,1) 50%, rgba(91,106,240,1) 100%);"
+            >
               <input
                 v-model="username"
-                style="background: black; color: white;"
                 class="px-5 py-4 w-100 border-0 rounded-1"
                 id="username"
                 type="text"
                 placeholder="Nombre de usuario"
                 required
+                style="background: black; color: white;"
               />
             </div>
           </div>
@@ -72,15 +73,18 @@ const handleSubmit = async () => {
             <label class="fs-18 fw-medium text-white mb-3" for="password">
               Contraseña
             </label>
-            <div class="rounded-1" style="padding: 1px; background: linear-gradient(90deg, rgba(108,213,246,1) 0%, rgba(248,157,92,1) 50%, rgba(91,106,240,1) 100%);">
+            <div
+              class="rounded-1"
+              style="padding: 1px; background: linear-gradient(90deg, rgba(108,213,246,1) 0%, rgba(248,157,92,1) 50%, rgba(91,106,240,1) 100%);"
+            >
               <input
                 v-model="password"
-                style="background: black; color: white;"
                 class="px-5 py-4 w-100 border-0 rounded-1"
                 id="password"
                 type="password"
                 placeholder="********"
                 required
+                style="background: black; color: white;"
               />
             </div>
           </div>
@@ -103,6 +107,7 @@ const handleSubmit = async () => {
   </div>
 </template>
 
+
 <style scoped>
 input::placeholder {
   color: rgba(255, 255, 255, 0.5);
@@ -111,4 +116,46 @@ input::placeholder {
 input:focus {
   outline: none;
 }
+
+@media (max-width: 576px) {
+  .px-5 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .py-4 {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .fs-18 {
+    font-size: 14px !important;
+  }
+
+  .rounded-1 {
+    border-radius: 5px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .fs-18 {
+    font-size: 16px !important;
+  }
+
+  .rounded-1 {
+    border-radius: 7px !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .fs-18 {
+    font-size: 20px !important;
+  }
+
+  .px-5 {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+}
 </style>
+

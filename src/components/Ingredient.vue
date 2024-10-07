@@ -181,7 +181,7 @@ onMounted(fetchIngredients);
 
     <div v-else-if="ingredients.length" class="ingredient-grid">
       <div v-for="ingredient in ingredients" :key="ingredient.id" class="ingredient-card">
-        <img :src="ingredient.imagen" :alt="ingredient.nombre" class="ingredient-image" />
+        <img src="../assets/images/logo.png"  class="ingredient-image" />
         <div class="ingredient-info">
           <h3>{{ ingredient.nombre }}</h3>
           <p v-if="ingredient.cantidadKilos > 0"><strong>Kilos:</strong> {{ ingredient.cantidadKilos }}</p>
@@ -488,5 +488,257 @@ button.provider {
 .ingredient-grid {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
+.ingredient-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
+h2 {
+  font-size: 2.2rem;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  text-align: center;
+  border-bottom: 3px solid #e67e22;
+  padding-bottom: 15px;
+  font-weight: 600;
+}
+
+.add-ingredient {
+  display: block;
+  margin: 20px auto 30px;
+  padding: 12px 24px;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 2px 5px rgba(46, 204, 113, 0.2);
+}
+
+.add-ingredient:hover {
+  background-color: #27ae60;
+  transform: translateY(-2px);
+}
+
+.ingredient-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.ingredient-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.ingredient-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.ingredient-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.ingredient-info {
+  padding: 20px;
+}
+
+.ingredient-info h3 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.ingredient-info p {
+  margin: 10px 0;
+  color: #5d6d7e;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.ingredient-info strong {
+  color: #34495e;
+  font-weight: 600;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 20px;
+  gap: 15px;
+}
+
+.button-group button {
+  background-color: transparent;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.button-group .edit:hover {
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+.button-group .delete:hover {
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+.button-group .provider {
+  background-color: #f39c12;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.button-group .provider:hover {
+  background-color: #e67e22;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal-content h3 {
+  color: #2c3e50;
+  font-size: 1.8rem;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  font-size: 24px;
+  color: #7f8c8d;
+  transition: color 0.3s;
+}
+
+.close:hover {
+  color: #34495e;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #34495e;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #bdc3c7;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+form button {
+  width: 100%;
+  padding: 14px;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+form button:hover {
+  background-color: #27ae60;
+}
+
+.error {
+  color: #e74c3c;
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.3rem;
+  color: #7f8c8d;
+  margin: 30px 0;
+}
+@media (max-width: 768px) {
+  .ingredient-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  .modal-content {
+    padding: 20px;
+  }
+
+  .ingredient-info h3 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ingredient-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .button-group {
+    justify-content: space-between;
+  }
+}
 </style>

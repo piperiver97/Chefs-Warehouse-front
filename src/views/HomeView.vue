@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
 import Login from '../components/Login.vue';
-import Register from '../components/Register.vue';
 import Navbar from '@/components/Navbar.vue';
 
 const selectedButton = ref(1);
@@ -27,6 +26,7 @@ const getButtonStyle = (buttonId) => {
   };
 };
 </script>
+
 <template>
   <main class="full-height">
     <Navbar />
@@ -71,16 +71,7 @@ const getButtonStyle = (buttonId) => {
                   autocomplete="off"
                   :checked="selectedButton === 2"
                 />
-                <label
-                  class="btn btn-lg rounded-4 px-5 py-3"
-                  :style="getButtonStyle(2)"
-                  for="btnradio2"
-                  @mouseover="hoverButton = 2"
-                  @mouseleave="hoverButton = null"
-                  @click="selectedButton = 2"
-                >
-                  REGISTRO
-                </label>
+                
               </div>
 
               <transition name="fade" mode="out-in">
@@ -92,32 +83,134 @@ const getButtonStyle = (buttonId) => {
       </div>
     </div>
   </main>
-
 </template>
 
-
-
 <style scoped>
-/* Para que el main ocupe el 100% de la altura de la pantalla */
 .full-height {
-  height: 120vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* Ajustar la altura de la sección de contenido */
 .content-section {
   flex-grow: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.content-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.8) 100%);
+  z-index: 1;
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+}
+
+h2 {
+  font-size: 3.5rem !important;
+  font-weight: 700;
+  background: linear-gradient(90deg, #6CD5F6, #F89D5C, #5B6AF0);
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 1.5rem;
+}
+
+.text-light {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 1.2rem !important;
+  line-height: 1.6;
+}
+
+.btn-group {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.btn-check {
+  display: none;
+}
+
+.btn {
+  position: relative;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #6CD5F6, #F89D5C, #5B6AF0);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.btn:hover::before {
+  opacity: 1;
+}
+
+.rounded-pill {
+  position: relative;
+}
+
+.rounded-pill::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: linear-gradient(90deg, #6CD5F6, #F89D5C, #5B6AF0);
+  filter: blur(20px);
+  z-index: -1;
+  opacity: 0.6;
 }
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+  transform: translateY(20px);
 }
 
+@media (max-width: 768px) {
+  h2 {
+    font-size: 2.5rem !important;
+  }
 
+  .btn-group {
+    flex-direction: column;
+  }
+
+  .content-section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .mw-md-lg {
+    max-width: 100%;
+  }
+}
 </style>

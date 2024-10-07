@@ -37,7 +37,6 @@ const bottomFeatures = ref([
   
 <template>
     <div>
-      <!-- First Section -->
       <section class="position-relative py-5">
         <div class="container">
           <div class="row">

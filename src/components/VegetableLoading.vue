@@ -30,7 +30,7 @@
   p {
     margin-top: 10px;
     font-size: 1.2rem;
-    color: wheat; /* Color verde */
+    color: wheat;
   }
   </style>
   

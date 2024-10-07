@@ -102,131 +102,162 @@ const deleteRecipe = async (id) => {
 onMounted(fetchRecipes);
   </script>
   
-  <template>
-    <div class="container">
-      <h2>Recetas</h2>
-      <button class="btn btn-success mb-3" @click="openModal">Crear Nueva Receta</button>
-  
-      <div v-if="error" class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ error }}
-        <button type="button" class="btn-close" @click="error = null" aria-label="Close"></button>
-      </div>
-  
-      <div v-if="loading" class="text-center">
-        <p>Cargando recetas...</p>
-      </div>
-  
-      <div v-else-if="!recipes.length" class="text-center">
-        <p>No hay recetas disponibles. ¡Crea una nueva!</p>
-      </div>
-  
-      <div v-else class="row">
-        <div class="col-md-4" v-for="recipe in recipes" :key="recipe.id">
-          <div class="card mb-3">
-            <div class="card-body">
-              <h5 class="card-title">{{ recipe.nombre }}</h5>
-              <p class="card-text">
-                <strong>Tiempo de preparación:</strong> {{ recipe.tiempo_preparacion }} minutos<br />
-                <strong>Tiempo de cocción:</strong> {{ recipe.tiempo_coccion }} minutos<br />
-                <strong>Porciones:</strong> {{ recipe.porciones }}<br />
-                <strong>Dificultad:</strong> {{ recipe.dificultad }}<br />
-              </p>
-              <div>
-                <h6>Elaboración:</h6>
-                <p>{{ recipe.elaboracion }}</p>
-              </div>
-              <button class="btn btn-primary me-2" @click="editRecipe(recipe)">Editar</button>
-              <button class="btn btn-danger" @click="deleteRecipe(recipe.id)">Eliminar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Modal para Crear y Editar Recetas -->
-      <Teleport to="body">
-        <div v-if="showModal" class="modal-overlay">
-          <div class="modal-wrapper">
-            <div class="modal">
-              <div class="modal-header">
-                <h5 class="modal-title">{{ editingRecipe ? 'Editar Receta' : 'Crear Nueva Receta' }}</h5>
-                <button type="button" class="btn-close" @click="closeModal"></button>
-              </div>
-              <div class="modal-body">
-                <form @submit.prevent="submitRecipe">
-                  <div class="mb-3">
-                    <label for="nombre" class="form-label">Nombre</label>
-                    <input type="text" v-model="form.nombre" class="form-control" id="nombre" required />
-                  </div>
-                  <div class="mb-3">
-                    <label for="imagen" class="form-label">URL de la Imagen</label>
-                    <input type="text" v-model="form.imagen" class="form-control" id="imagen" />
-                  </div>
-                  <div class="mb-3">
-                    <label for="tiempo_preparacion" class="form-label">Tiempo de Preparación (min)</label>
-                    <input type="number" v-model="form.tiempo_preparacion" class="form-control" id="tiempo_preparacion" required />
-                  </div>
-                  <div class="mb-3">
-                    <label for="tiempo_coccion" class="form-label">Tiempo de Cocción (min)</label>
-                    <input type="number" v-model="form.tiempo_coccion" class="form-control" id="tiempo_coccion" required />
-                  </div>
-                  <div class="mb-3">
-                    <label for="porciones" class="form-label">Porciones</label>
-                    <input type="number" v-model="form.porciones" class="form-control" id="porciones" required />
-                  </div>
-                  <div class="mb-3">
-                    <label for="dificultad" class="form-label">Dificultad</label>
-                    <select v-model="form.dificultad" class="form-control" id="dificultad" required>
-                      <option value="Fácil">Fácil</option>
-                      <option value="Media">Media</option>
-                      <option value="Difícil">Difícil</option>
-                    </select>
-                  </div>
-                  <div class="mb-3">
-                    <label for="elaboracion" class="form-label">Elaboración</label>
-                    <textarea v-model="form.elaboracion" class="form-control" id="elaboracion" rows="3" required></textarea>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="closeModal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary" :disabled="submitting">
-                      {{ submitting ? 'Guardando...' : (editingRecipe ? 'Actualizar' : 'Crear') }}
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Teleport>
+
+<template>
+  <div class="container">
+    <h2>Recetas</h2>
+    <button class="btn btn-success mb-3" @click="openModal">Crear Nueva Receta</button>
+
+    <div v-if="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ error }}
+      <button type="button" class="btn-close" @click="error = null" aria-label="Close"></button>
     </div>
-  </template>
-  
-  <style scoped>
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .modal-wrapper {
-    background-color: white;
-    border-radius: 8px;
-    max-width: 500px;
-    width: 90%;
-  }
-  
+
+    <div v-if="loading" class="text-center">
+      <p>Cargando recetas...</p>
+    </div>
+
+    <div v-else-if="!recipes.length" class="text-center">
+      <p>No hay recetas disponibles. ¡Crea una nueva!</p>
+    </div>
+
+    <div v-else class="row">
+      <div class="col-lg-4 col-md-6 col-sm-12" v-for="recipe in recipes" :key="recipe.id">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">{{ recipe.nombre }}</h5>
+            <p class="card-text">
+              <strong>Tiempo de preparación:</strong> {{ recipe.tiempo_preparacion }} minutos<br />
+              <strong>Tiempo de cocción:</strong> {{ recipe.tiempo_coccion }} minutos<br />
+              <strong>Porciones:</strong> {{ recipe.porciones }}<br />
+              <strong>Dificultad:</strong> {{ recipe.dificultad }}<br />
+            </p>
+            <div>
+              <h6>Elaboración:</h6>
+              <p>{{ recipe.elaboracion }}</p>
+            </div>
+            <button class="btn btn-success me-2" @click="editRecipe(recipe)">Editar</button>
+            <button class="btn btn-danger" @click="deleteRecipe(recipe.id)">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <Teleport to="body">
+      <div v-if="showModal" class="modal-overlay">
+        <div class="modal-wrapper">
+          <div class="modal">
+            <div class="modal-header">
+              <h5 class="modal-title">{{ editingRecipe ? 'Editar Receta' : 'Crear Nueva Receta' }}</h5>
+              <button type="button" class="btn-close" @click="closeModal"></button>
+            </div>
+            <div class="modal-body">
+              <form @submit.prevent="submitRecipe">
+                <div class="mb-3">
+                  <label for="nombre" class="form-label">Nombre</label>
+                  <input type="text" v-model="form.nombre" class="form-control" id="nombre" required />
+                </div>
+                <div class="mb-3">
+                  <label for="imagen" class="form-label">URL de la Imagen</label>
+                  <input type="text" v-model="form.imagen" class="form-control" id="imagen" />
+                </div>
+                <div class="mb-3">
+                  <label for="tiempo_preparacion" class="form-label">Tiempo de Preparación (min)</label>
+                  <input type="number" v-model="form.tiempo_preparacion" class="form-control" id="tiempo_preparacion" required />
+                </div>
+                <div class="mb-3">
+                  <label for="tiempo_coccion" class="form-label">Tiempo de Cocción (min)</label>
+                  <input type="number" v-model="form.tiempo_coccion" class="form-control" id="tiempo_coccion" required />
+                </div>
+                <div class="mb-3">
+                  <label for="porciones" class="form-label">Porciones</label>
+                  <input type="number" v-model="form.porciones" class="form-control" id="porciones" required />
+                </div>
+                <div class="mb-3">
+                  <label for="dificultad" class="form-label">Dificultad</label>
+                  <select v-model="form.dificultad" class="form-control" id="dificultad" required>
+                    <option value="Fácil">Fácil</option>
+                    <option value="Media">Media</option>
+                    <option value="Difícil">Difícil</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="elaboracion" class="form-label">Elaboración</label>
+                  <textarea v-model="form.elaboracion" class="form-control" id="elaboracion" rows="3" required></textarea>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" @click="closeModal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary" :disabled="submitting">
+                    {{ submitting ? 'Guardando...' : (editingRecipe ? 'Actualizar' : 'Crear') }}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+  </div>
+</template>
+
+<style scoped>
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-wrapper {
+  background-color: white;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
   .modal {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%; 
+    max-width: 90%;
   }
-  </style>
-  
+
+  .container h2 {
+    font-size: 1.5rem;
+  }
+
+  .card h5 {
+    font-size: 1.2rem;
+  }
+
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .col-sm-12 {
+    margin-bottom: 1rem;
+  }
+
+  .modal {
+    padding: 15px;
+  }
+}
+</style>
