@@ -55,3 +55,6 @@ Antes de ejecutar el proyecto, asegúrate de tener instalados los siguientes com
 
 ## Vista Recetas
 ![0ac8032b92f7b0da8c09b4822c184796](https://github.com/user-attachments/assets/9bfc3422-5d4d-4fb5-b883-9455279152a6)
+## Diagrama de flujo
+![134efcad3ba4fae4f49b50173f50c0aa](https://github.com/user-attachments/assets/94d96f55-b459-42ee-bf1b-b145376473e6)
+
