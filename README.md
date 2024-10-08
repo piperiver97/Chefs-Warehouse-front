@@ -1,108 +1,57 @@
-# warehouse-chef
-
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-```markdown
 # CHEF-WAREHOUSE Frontend
 
-Este es el frontend de la aplicación **CHEF-WAREHOUSE**, una plataforma diseñada para la gestión de almacenes en cocinas profesionales. El frontend está desarrollado con **Vue 3**, permitiendo una interfaz de usuario dinámica y responsiva.
+Bienvenido al frontend de **CHEF-WAREHOUSE**, una aplicación diseñada para optimizar la gestión de almacenes de ingredientes, proveedores y recetas en cocinas profesionales. Esta plataforma proporciona una interfaz de usuario moderna y responsiva desarrollada con **Vue 3**.
+
+## Funcionalidades Principales
+
+- **Gestión de Ingredientes:** Permite agregar, actualizar, eliminar y listar ingredientes utilizados en la cocina.
+- **Gestión de Proveedores:** Los usuarios pueden gestionar proveedores de manera eficiente, almacenando información clave de cada uno.
+- **Gestión de Recetas:** Administra recetas detalladas con los ingredientes necesarios.
+- **Interfaz amigable y responsiva:** Diseñada con **Bootstrap**, la interfaz se adapta perfectamente a cualquier dispositivo.
 
 ## Tecnologías Utilizadas
 
-- **Vue 3**: Framework de JavaScript para la construcción de la interfaz de usuario.
-- **Vue Router**: Para el manejo de las rutas en la aplicación.
-- **Axios**: Para realizar peticiones HTTP al backend.
-- **Bootstrap**: Framework de CSS para un diseño responsivo y moderno.
-- **Vite**: Herramienta para el desarrollo y construcción del proyecto.
+- **Vue 3:** Framework de JavaScript para la construcción de interfaces de usuario reactivas.
+- **Vue Router:** Sistema de enrutamiento para gestionar las páginas de la aplicación.
+- **Axios:** Librería para realizar peticiones HTTP al backend.
+- **Bootstrap:** Framework de CSS para un diseño moderno y responsivo.
+- **Vite:** Herramienta de desarrollo y construcción ultrarrápida.
 
 ## Requisitos Previos
 
-Antes de ejecutar este proyecto, asegúrate de tener lo siguiente instalado:
+Antes de ejecutar el proyecto, asegúrate de tener instalados los siguientes componentes:
 
 - [Node.js](https://nodejs.org/en/) (versión 14 o superior)
 - [npm](https://www.npmjs.com/get-npm) (incluido con Node.js)
-- [Vue CLI](https://cli.vuejs.org/) (opcional, para desarrollo avanzado)
 
 ## Instalación y Configuración
 
-1. Clona este repositorio en tu máquina local:
+1. **Clonar el repositorio**: 
 
-    ```bash
-    git clone https://github.com/tu-usuario/chef-warehouse-frontend.git
-    ```
+   ```bash
+   git clone https://github.com/tu-usuario/chef-warehouse-frontend.git
 
-2. Navega a la carpeta del proyecto:
+2. **Instalar**: 
 
-    ```bash
-    cd chef-warehouse-frontend
-    ```
-
-3. Instala las dependencias:
-
-    ```bash
-    npm install
-    ```
-
-4. Configura la URL del backend en el archivo `.env` (si existe) o directamente en el código:
-
-    ```env
-    VITE_API_URL=http://localhost:8080/api
-    ```
-
-5. Ejecuta el servidor de desarrollo:
-
-    ```bash
-    npm run dev
-    ```
-
-6. Abre tu navegador en `http://localhost:3000` para ver la aplicación en acción.
-
-## Scripts Disponibles
-
-En el directorio del proyecto, puedes ejecutar los siguientes comandos:
-
-- `npm run dev`: Ejecuta la aplicación en modo de desarrollo. La página se recargará automáticamente cuando se realicen cambios.
-- `npm run build`: Construye la aplicación para producción en la carpeta `dist`.
-- `npm run lint`: Ejecuta la comprobación de estilo de código con ESLint.
-
-## Capturas
-## Login
-![8a64ff5f0361f305ae1416be4adbc5ab](https://github.com/user-attachments/assets/00aa0fa6-bf75-41ec-b8bc-91698681e353)
-
-## Servicios 
-![2d114ff05b1fa90829e0621a46869cd3](https://github.com/user-attachments/assets/34142fc5-40b9-468d-8298-29eabf6f8da0)
+   ```usa
+   npm install
+3. **Ejecutar**: 
+   ```usa
+   npm run dev.
+## Capturas 
+### Login
+![8a64ff5f0361f305ae1416be4adbc5ab](https://github.com/user-attachments/assets/8cf4a88b-b6f1-410d-9139-a21b1235c218)
+## Servicios
+![2d114ff05b1fa90829e0621a46869cd3](https://github.com/user-attachments/assets/b140abc6-3284-4487-99df-a6a05a46e9e1)
 
 ## Contacto
-![6cd042b0636fa200aba6cd2f7511ec19](https://github.com/user-attachments/assets/1ab09090-79a1-4246-a277-9c2b8f4664f4)
+![6cd042b0636fa200aba6cd2f7511ec19](https://github.com/user-attachments/assets/f06eb59e-3861-4df4-b198-caf09f73c9cf)
 
+## Vista Ingredientes
+![1d45ca29a98bedeb4664b95b5bc232bb](https://github.com/user-attachments/assets/2bbb63fa-c7e8-4b82-9a6c-1fd6fc313781)
+
+## Vista Proveedores
+![0ac8032b92f7b0da8c09b4822c184796](https://github.com/user-attachments/assets/a517a9fa-9a48-4f8f-a985-9017476f7bfc)
+
+## Vista Recetas
+![0ac8032b92f7b0da8c09b4822c184796](https://github.com/user-attachments/assets/9bfc3422-5d4d-4fb5-b883-9455279152a6)
